@@ -7,6 +7,7 @@ Created by [Stuart Miller](https://github.com/sjmiller8182).
 In an effort to reduce employee attrition, data has been provided on employees. The objective is to analyze the data to determine what factors (if any) correlate to attrition. The following will be reported:
  * Top 3 factors assocatied with employee turnover
  * A model for predicting employee attrition
+ * A model for predicting monthly salary
  * Job role specific trend
  * Any other interesting trends in the data
 
@@ -18,7 +19,7 @@ In an effort to reduce employee attrition, data has been provided on employees. 
 
 ## Codebook
 
-The [Codebook](NULL) provides additional details on the regarding the computational environment, code, and data.
+The [Codebook](https://github.com/sjmiller8182/AttritionAnalysis/blob/master/CodeBook.md) provides additional details on the regarding the computational environment, code, and data.
 
 ## Repo Structure
     .
