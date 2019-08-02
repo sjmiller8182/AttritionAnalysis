@@ -1,0 +1,42 @@
+---
+title: "Title"
+author: "Stuart Miller"
+date: |
+  Master of Science in Data Science, Southern Methodist University, USA
+lang: en-US
+class: man
+# figsintext: true
+numbersections: true
+encoding: UTF-8
+bibliography: references.bib
+biblio-style: apalike
+output:
+  bookdown::pdf_document2:
+     citation_package: natbib
+     keep_tex: true
+     toc: false
+header-includes:
+   - \usepackage{amsmath}
+   - \usepackage[utf8]{inputenc}
+   - \usepackage[T1]{fontenc}
+   - \usepackage{setspace}
+   - \onehalfspacing
+   - \setcitestyle{round}
+   - \newcommand\numberthis{\addtocounter{equation}{1}\tag{\theequation}}
+editor_options: 
+  chunk_output_type: console
+---
+
+# Executive Summary
+
+# Introduction
+
+@Sleuth
+
+# Attrition Analysis
+
+# Modeling
+
+# Appendix
+
+# References
