@@ -16,7 +16,6 @@ There are three types of variables in this data set: factor, continuous, and sta
 
 #### Factor Variables
 
-* Age
 * Attrition
 * BusinessTravel
 * Department
