@@ -11,13 +11,18 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # Setup Environment
 
-```{r, setup, message=FALSE}
+```{r, setup-env, message=FALSE}
+# import libraries
 library(knitr)
 library(tidyverse)
 library(naniar)
 library(Hmisc)
 library(GGally)
 
+# import helper functions
+source('../Helper/data_munging.R')
+
+# read in data
 train <- read_csv('../data/CaseStudy2-data_train.csv')
 ```
 
@@ -28,6 +33,263 @@ A data dictionary was not given. So start by exploring the variables to get a se
 ```{r}
 names(train)
 ```
+
+# Continuous Variables
+
+Exploration of the continuous variables.
+
+```{r}
+# create a vector of numeric features
+features.numeric <- c('DailyRate', 'DistanceFromHome', 'Age', 'HourlyRate', 'MonthlyIncome', 'MonthlyRate',
+           'NumCompaniesWorked','PercentSalaryHike', 'TotalWorkingYears', 'TrainingTimesLastYear',
+           'YearsAtCompany','YearsInCurrentRole','YearsSinceLastPromotion', 'YearsWithCurrManager')
+```
+
+
+## Univariate Analysis
+
+Explore features in isolation and the relationship between features and the response variables.
+
+**Correlation to Response**
+
+The following table ranks features in order of descending correlation to `MonthlyIncome`.
+
+```{r, echo=T,warning=F, message=F}
+train.numeric <- train %>% select(features.numeric)
+
+correlation.matrix <- rcorr(as.matrix(train.numeric))
+train.corToMI <- data.frame(flattenCorrMatrix(correlation.matrix$r, correlation.matrix$P)) %>% 
+  filter(row == 'MonthlyIncome' | column == 'MonthlyIncome') %>%
+  mutate(cor = abs(cor)) %>%
+  arrange(-cor)
+kable(train.corToMI)
+```
+
+**Variance of Features**
+
+The following table ranks features in order of descending standard deviation.
+
+```{r}
+# get varaince table
+temp.table <- train %>%
+  select(features.numeric) %>%
+  summarise_all(funs(sd(.))) %>%
+  rownames_to_column %>%
+  gather(var, value, -rowname) %>%
+  arrange(-value) %>%
+  select(-one_of(c('rowname')))
+# rename columns for clairity and print markdown table
+names(temp.table) <- c('Feature','Standard Deviation')
+kable(temp.table)
+```
+
+
+**`Age` exploration**
+
+There appears to be a relationship between `Age` and `MonthlyIncome`. A relationship between `Age` and `Attrition` is not clear.
+
+```{r}
+train %>% ggplot(aes(x = Age)) + 
+  geom_histogram(bins = 15)
+
+train %>% ggplot(aes(x = Age)) + 
+  geom_histogram(bins = 15) + 
+  facet_wrap(~ Attrition)
+
+train %>% ggplot(aes(x = Age, y = MonthlyIncome)) + 
+  geom_point() + geom_smooth(method = 'lm')
+```
+
+**`DailyRate` exploration**
+
+There does not appear to be a correlation between `DailyRate` and either outcome variable.
+
+```{r}
+train %>% ggplot(aes(x = DailyRate)) + 
+  geom_histogram(bins = 15)
+
+train %>% ggplot(aes(x = DailyRate)) + 
+  geom_histogram(bins = 15) + 
+  facet_wrap(~ Attrition)
+
+train %>% ggplot(aes(x = DailyRate, y = MonthlyIncome)) + 
+  geom_point() + geom_smooth(method = 'lm')
+```
+
+**`DistanceFromHome` exploration**
+
+There does not appear to be a correlation between `DistanceFromHome` and either outcome variable.
+
+```{r}
+train %>% ggplot(aes(x = DistanceFromHome)) + 
+  geom_histogram(bins = 15)
+
+train %>% ggplot(aes(x = DistanceFromHome)) + 
+  geom_histogram(bins = 15) + 
+  facet_wrap(~ Attrition)
+
+train %>% ggplot(aes(x = DistanceFromHome, y = MonthlyIncome)) + 
+  geom_point() + geom_smooth(method = 'lm')
+```
+
+**`MonthlyRate` exploration**
+
+There does not appear to be a correlation between `MonthlyRate` and either outcome variable.
+
+```{r}
+train %>% ggplot(aes(x = MonthlyRate)) + 
+  geom_histogram(bins = 15)
+
+train %>% ggplot(aes(x = MonthlyRate)) + 
+  geom_histogram(bins = 15) + 
+  facet_wrap(~ Attrition)
+
+train %>% ggplot(aes(x = MonthlyRate, y = MonthlyIncome)) + 
+  geom_point() + geom_smooth(method = 'lm')
+```
+
+**`PercentSalaryHike` exploration**
+
+There does not appear to be a correlation between `PercentSalaryHike` and either outcome variable.
+
+```{r}
+train %>% ggplot(aes(x = PercentSalaryHike)) + 
+  geom_histogram()
+
+train %>% ggplot(aes(x = PercentSalaryHike)) + 
+  geom_histogram() + 
+  facet_wrap(~ Attrition)
+
+train %>% ggplot(aes(x = PercentSalaryHike, y = MonthlyIncome)) + 
+  geom_point() + geom_smooth(method = 'lm')
+```
+
+**`TotalWorkingYears` exploration**
+
+There does appear to be a correlation between `TotalWorkingYears` and `MonthlyIncome`.
+
+```{r}
+train %>% ggplot(aes(x = TotalWorkingYears)) + 
+  geom_histogram(bins = 15)
+
+train %>% ggplot(aes(x = TotalWorkingYears)) + 
+  geom_histogram(bins = 15) + 
+  facet_wrap(~ Attrition)
+
+train %>% ggplot(aes(x = TotalWorkingYears, y = MonthlyIncome)) + 
+  geom_point() + geom_smooth(method = 'lm')
+```
+
+**`TrainingTimesLastYear` exploration**
+
+There does not appear to be a correlation between `TrainingTimesLastYear` and either outcome variable.
+
+```{r}
+train %>% ggplot(aes(x = TrainingTimesLastYear)) + 
+  geom_histogram(bins = 15)
+
+train %>% ggplot(aes(x = TrainingTimesLastYear)) + 
+  geom_histogram(bins = 15) + 
+  facet_wrap(~ Attrition)
+
+train %>% ggplot(aes(x = TrainingTimesLastYear, y = MonthlyIncome)) + 
+  geom_point() + geom_smooth(method = 'lm')
+```
+
+**`YearsAtCompany` exploration**
+
+There does appear to be a correlation between `YearsAtCompany` and `MonthlyIncome`.
+
+```{r}
+train %>% ggplot(aes(x = YearsAtCompany)) + 
+  geom_histogram(bins = 15)
+
+train %>% ggplot(aes(x = YearsAtCompany)) + 
+  geom_histogram(bins = 15) + 
+  facet_wrap(~ Attrition)
+
+train %>% ggplot(aes(x = YearsAtCompany, y = MonthlyIncome)) + 
+  geom_point() + geom_smooth(method = 'lm')
+```
+
+**`YearsInCurrentRole` exploration**
+
+There does appear to be a correlation between `YearsInCurrentRole` and `MonthlyIncome`.
+
+```{r}
+train %>% ggplot(aes(x = YearsInCurrentRole)) + 
+  geom_histogram(bins = 15)
+
+train %>% ggplot(aes(x = YearsInCurrentRole)) + 
+  geom_histogram(bins = 15) + 
+  facet_wrap(~ Attrition)
+
+train %>% ggplot(aes(x = YearsInCurrentRole, y = MonthlyIncome)) + 
+  geom_point() + geom_smooth(method = 'lm')
+```
+
+**`YearsSinceLastPromotion` exploration**
+
+There does appear to be a correlation between `YearsSinceLastPromotion` and `MonthlyIncome`.
+
+```{r}
+train %>% ggplot(aes(x = YearsSinceLastPromotion)) + 
+  geom_histogram(bins = 15)
+
+train %>% ggplot(aes(x = YearsSinceLastPromotion)) + 
+  geom_histogram(bins = 15) + 
+  facet_wrap(~ Attrition)
+
+train %>% ggplot(aes(x = YearsSinceLastPromotion, y = MonthlyIncome)) + 
+  geom_point() + geom_smooth(method = 'lm')
+```
+
+**`YearsWithCurrManager` exploration**
+
+There does not appear to be a correlation between `YearsWithCurrManager` and either outcome variable.
+
+```{r}
+train %>% ggplot(aes(x = YearsWithCurrManager)) + 
+  geom_histogram(bins = 15)
+
+train %>% ggplot(aes(x = YearsWithCurrManager)) + 
+  geom_histogram(bins = 15) + 
+  facet_wrap(~ Attrition)
+
+train %>% ggplot(aes(x = YearsWithCurrManager, y = MonthlyIncome)) + 
+  geom_point() + geom_smooth(method = 'lm')
+```
+
+## Multivariate Exploration
+
+Scatter plot and correlation matrix gives a board overview of correlations between continuous variables.
+
+* `MonthlyIncome` appears to be correlated with `Age` and `TotalWorkingYears`
+* `YearsAtCompany`,`YearsInCurrentRole`,`YearsSinceLastPromotion`, `YearsWithCurrManager`, `TotalWorkingYears`, and `Age` appear to be correlated.
+
+```{r, fig.height = 15, fig.width = 15, message=FALSE}
+train %>%
+  select(features.numeric) %>%
+  ggpairs()
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
