@@ -18,9 +18,10 @@ library(tidyverse)
 library(naniar)
 library(Hmisc)
 library(GGally)
+library(gridExtra)
 
 # import helper functions
-source('../Helper/data_munging.R')
+source('../helper/data_munging.R')
 
 # read in data
 train <- read_csv('../data/CaseStudy2-data_train.csv')
@@ -34,7 +35,30 @@ A data dictionary was not given. So start by exploring the variables to get a se
 names(train)
 ```
 
-# Continuous Variables
+# Reponse Variables
+
+Two models are requested
+
+* A model for salary, which is given as `MonthlyIncome` in the dataset.
+* A model for attrition, which is given as `Attrition` in the dataset.
+
+Histogram of monthly income reveals that it is highly skewed to the right.
+
+```{r}
+# histogram of MonthlyIncome
+train %>% ggplot(aes(x = MonthlyIncome)) +
+  geom_histogram(bins = 15)
+```
+
+A bar plot of Attrition reveals that the response variable is highly imbalanced.
+
+```{r}
+# histogram of Attrition
+train %>% ggplot(aes(x = Attrition)) +
+  geom_bar()
+```
+
+# Explanatory - Continuous Variables
 
 Exploration of the continuous variables.
 
@@ -269,15 +293,44 @@ Scatter plot and correlation matrix gives a board overview of correlations betwe
 
 ```{r, fig.height = 15, fig.width = 15, message=FALSE}
 train %>%
-  select(features.numeric) %>%
+  select(c(features.numeric)) %>%
   ggpairs()
 ```
 
+**Look at log of MonthlyIncome `logMI` because MonthlyIncome is right skewed**
 
+```{r, fig.height = 15, fig.width = 15, message=FALSE}
+train <- train %>% mutate(logMI = log(MonthlyIncome))
+train %>%
+  select(c(features.numeric, 'logMI')) %>%
+  ggpairs()
+```
 
+**Close up of MonthlyIncome and highest correlated features**
 
+Taking the log of MonthlyIncome does not appear to improve linear correlation.
 
+```{r, fig.height = 15, fig.width = 15, message=FALSE}
+train %>%
+  select(c('logMI','MonthlyIncome','Age','TotalWorkingYears','YearsAtCompany','YearsInCurrentRole',
+           'YearsSinceLastPromotion','YearsWithCurrManager')) %>%
+  ggpairs()
+```
 
+From the plot above, several of the variables appear to be linearly related: `YearsAtCompany` vs `YearsWithCurrManager`, `YearsInCurrentRole` and `YearsSinceLastPromotion`. This could be an interesting trend in the data.
+
+```{r, message=FALSE}
+p1 <- train %>%
+  ggplot(aes(x = YearsWithCurrManager, y = YearsAtCompany)) + 
+  geom_point() + geom_smooth(method = 'lm')
+p2 <- train %>%
+  ggplot(aes(x = YearsInCurrentRole, y = YearsAtCompany)) + 
+  geom_point() + geom_smooth(method = 'lm')
+p3 <- train %>%
+  ggplot(aes(x = YearsSinceLastPromotion, y = YearsAtCompany)) + 
+  geom_point() + geom_smooth(method = 'lm')
+grid.arrange(p1,p2,p3, ncol = 2)
+```
 
 
 
