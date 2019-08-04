@@ -1,0 +1,33 @@
+---
+title: "Exploratory Data Analysis"
+author: "Stuart Miller"
+date: "August 4, 2019"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Setup Environment
+
+```{r, setup, message=FALSE}
+library(knitr)
+library(tidyverse)
+library(naniar)
+library(Hmisc)
+library(GGally)
+
+train <- read_csv('../data/CaseStudy2-data_train.csv')
+```
+
+# Data Exploration
+
+A data dictionary was not given. So start by exploring the variables to get a sense of what is included. A simple data dictionary will be built. See './analysis/data/README.md' for more details.
+
+```{r}
+names(train)
+```
+
+
+
