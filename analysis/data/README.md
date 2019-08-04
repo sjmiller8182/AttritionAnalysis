@@ -16,7 +16,7 @@ There are three types of variables in this data set: factor, continuous, and sta
 
 #### Factor Variables
 
-* Attrition
+* Attrition  (response variable)
 * BusinessTravel
 * Department
 * Education
@@ -41,7 +41,7 @@ There are three types of variables in this data set: factor, continuous, and sta
 * DistanceFromHome
 * Age
 * HourlyRate
-* MonthlyIncome
+* MonthlyIncome (response variable)
 * MonthlyRate
 * NumCompaniesWorked
 * PercentSalaryHike
