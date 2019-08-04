@@ -1,0 +1,73 @@
+---
+title: "Missing Data Analysis"
+author: "Stuart Miller"
+date: "August 4, 2019"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Setup Environment
+
+```{r, setup-env, message=FALSE}
+library(knitr)
+library(tidyverse)
+library(naniar)
+library(GGally)
+
+train <- read_csv('../data/CaseStudy2-data_train.csv')
+test_attrition <- read_csv('../data/CaseStudy2CompSetNoAttrition_test.csv')
+test_salary <- read_csv('../data/CaseStudy2CompSetNoAttrition_test.csv')
+```
+
+# Missing Data Assessment
+
+First determine what columns are missing data.
+
+## Training Data
+
+There are no missing values in the training set.
+
+```{r}
+train.nabular <- train %>% bind_shadow()
+train.missing.summary <- train.nabular %>% miss_var_summary()
+
+train.missing.summary %>%
+  ggplot(aes(x = reorder(variable, -n_miss), y = pct_miss)) + geom_bar(stat = 'identity') +
+  theme(axis.text.x = element_text(angle = 70, hjust = 1)) +
+  labs(title = 'Percent Missing Values of Features (Training Set)',
+       y = '% Observations Missing', x = 'Feature Name')
+```
+
+## Testing Data for Attrition
+
+There are no missing values in the test set.
+
+```{r}
+test_attrition.nabular <- test_attrition %>% bind_shadow()
+test_attrition.missing.summary <- test_attrition.nabular %>% miss_var_summary()
+
+test_attrition.missing.summary %>%
+  ggplot(aes(x = reorder(variable, -n_miss), y = pct_miss)) + geom_bar(stat = 'identity') +
+  theme(axis.text.x = element_text(angle = 70, hjust = 1)) +
+  labs(title = 'Percent Missing Values of Features (Test-Attrition)',
+       y = '% Observations Missing', x = 'Feature Name')
+```
+
+## Testing Data for Salary
+
+There are no missing values in the test set.
+
+```{r}
+test_salary.nabular <- test_salary %>% bind_shadow()
+test_salary.missing.summary <- test_salary.nabular %>% miss_var_summary()
+
+test_salary.missing.summary %>%
+  ggplot(aes(x = reorder(variable, -n_miss), y = pct_miss)) + geom_bar(stat = 'identity') +
+  theme(axis.text.x = element_text(angle = 70, hjust = 1)) +
+  labs(title = 'Percent Missing Values of Features (Test Salary)',
+       y = '% Observations Missing', x = 'Feature Name')
+```
+
