@@ -12,9 +12,14 @@ library(tidyverse)
 library(naniar)
 library(Hmisc)
 library(GGally)
+library(gridExtra)
+library(RColorBrewer)
+library(gplots)
+library(corrplot)
 
 # import helper functions
 source('../helper/data_munging.R')
+source('../helper/visual.R')
 
 # read in data
 train <- read_csv('../data/CaseStudy2-data_train.csv')
@@ -127,6 +132,41 @@ kable(train.corToMI)
 | HourlyRate       | MonthlyIncome           | 0.0023912 | 0.9438534 |
 | DailyRate        | MonthlyIncome           | 0.0000879 | 0.9979342 |
 
+``` r
+heatmap.cor <- function(df, palette){
+  df %>%
+    keep(is.numeric) %>%
+    drop_na() %>%
+    cor %>%
+    heatmap.2(col = palette,
+              density.info = 'none', trace = 'none',
+              dendrogram = c('both'), symm = F,
+              symkey = T, symbreaks = T, scale = 'none',
+              key = T)
+}
+my_p <- colorRampPalette(c('red','white','black'))(n = 299)
+heatmap.cor(train.numeric, my_p)
+```
+
+![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
+
+``` r
+heatmap.cor <- function(df){
+  df %>%
+    keep(is.numeric) %>%
+    drop_na() %>%
+    cor %>%
+    corrplot( addCoef.col = 'white',
+             number.digits = 2,
+             number.cex = 0.5,
+             method = 'square',
+             )
+}
+heatmap.cor(train.numeric)
+```
+
+![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
+
 **Variance of Features**
 
 The following table ranks features in order of descending standard
@@ -163,6 +203,18 @@ kable(temp.table)
 | NumCompaniesWorked      |           2.520443 |
 | TrainingTimesLastYear   |           1.272665 |
 
+**Density Plots of All Numeric Features**
+
+``` r
+train %>% keep(is.numeric) %>% 
+  gather() %>% 
+  ggplot(aes(x = value)) + 
+  facet_wrap(~ key, scales = 'free') + 
+  geom_density() 
+```
+
+![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
+
 **`Age` exploration**
 
 There appears to be a relationship between `Age` and `MonthlyIncome`. A
@@ -173,7 +225,7 @@ train %>% ggplot(aes(x = Age)) +
   geom_histogram(bins = 15)
 ```
 
-![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
+![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
 
 ``` r
 train %>% ggplot(aes(x = Age)) + 
@@ -181,14 +233,14 @@ train %>% ggplot(aes(x = Age)) +
   facet_wrap(~ Attrition)
 ```
 
-![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-7-2.png)<!-- -->
+![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-10-2.png)<!-- -->
 
 ``` r
 train %>% ggplot(aes(x = Age, y = MonthlyIncome)) + 
   geom_point() + geom_smooth(method = 'lm')
 ```
 
-![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-7-3.png)<!-- -->
+![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-10-3.png)<!-- -->
 
 **`DailyRate` exploration**
 
@@ -200,7 +252,7 @@ train %>% ggplot(aes(x = DailyRate)) +
   geom_histogram(bins = 15)
 ```
 
-![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->
+![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-11-1.png)<!-- -->
 
 ``` r
 train %>% ggplot(aes(x = DailyRate)) + 
@@ -208,14 +260,14 @@ train %>% ggplot(aes(x = DailyRate)) +
   facet_wrap(~ Attrition)
 ```
 
-![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-8-2.png)<!-- -->
+![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-11-2.png)<!-- -->
 
 ``` r
 train %>% ggplot(aes(x = DailyRate, y = MonthlyIncome)) + 
   geom_point() + geom_smooth(method = 'lm')
 ```
 
-![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-8-3.png)<!-- -->
+![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-11-3.png)<!-- -->
 
 **`DistanceFromHome` exploration**
 
@@ -227,7 +279,7 @@ train %>% ggplot(aes(x = DistanceFromHome)) +
   geom_histogram(bins = 15)
 ```
 
-![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
+![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->
 
 ``` r
 train %>% ggplot(aes(x = DistanceFromHome)) + 
@@ -235,14 +287,14 @@ train %>% ggplot(aes(x = DistanceFromHome)) +
   facet_wrap(~ Attrition)
 ```
 
-![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-9-2.png)<!-- -->
+![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-12-2.png)<!-- -->
 
 ``` r
 train %>% ggplot(aes(x = DistanceFromHome, y = MonthlyIncome)) + 
   geom_point() + geom_smooth(method = 'lm')
 ```
 
-![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-9-3.png)<!-- -->
+![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-12-3.png)<!-- -->
 
 **`MonthlyRate` exploration**
 
@@ -254,7 +306,7 @@ train %>% ggplot(aes(x = MonthlyRate)) +
   geom_histogram(bins = 15)
 ```
 
-![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
+![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-13-1.png)<!-- -->
 
 ``` r
 train %>% ggplot(aes(x = MonthlyRate)) + 
@@ -262,14 +314,14 @@ train %>% ggplot(aes(x = MonthlyRate)) +
   facet_wrap(~ Attrition)
 ```
 
-![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-10-2.png)<!-- -->
+![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-13-2.png)<!-- -->
 
 ``` r
 train %>% ggplot(aes(x = MonthlyRate, y = MonthlyIncome)) + 
   geom_point() + geom_smooth(method = 'lm')
 ```
 
-![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-10-3.png)<!-- -->
+![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-13-3.png)<!-- -->
 
 **`PercentSalaryHike` exploration**
 
@@ -283,7 +335,7 @@ train %>% ggplot(aes(x = PercentSalaryHike)) +
 
     ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
 
-![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-11-1.png)<!-- -->
+![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-14-1.png)<!-- -->
 
 ``` r
 train %>% ggplot(aes(x = PercentSalaryHike)) + 
@@ -293,14 +345,14 @@ train %>% ggplot(aes(x = PercentSalaryHike)) +
 
     ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
 
-![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-11-2.png)<!-- -->
+![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-14-2.png)<!-- -->
 
 ``` r
 train %>% ggplot(aes(x = PercentSalaryHike, y = MonthlyIncome)) + 
   geom_point() + geom_smooth(method = 'lm')
 ```
 
-![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-11-3.png)<!-- -->
+![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-14-3.png)<!-- -->
 
 **`TotalWorkingYears` exploration**
 
@@ -312,7 +364,7 @@ train %>% ggplot(aes(x = TotalWorkingYears)) +
   geom_histogram(bins = 15)
 ```
 
-![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->
+![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-15-1.png)<!-- -->
 
 ``` r
 train %>% ggplot(aes(x = TotalWorkingYears)) + 
@@ -320,14 +372,14 @@ train %>% ggplot(aes(x = TotalWorkingYears)) +
   facet_wrap(~ Attrition)
 ```
 
-![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-12-2.png)<!-- -->
+![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-15-2.png)<!-- -->
 
 ``` r
 train %>% ggplot(aes(x = TotalWorkingYears, y = MonthlyIncome)) + 
   geom_point() + geom_smooth(method = 'lm')
 ```
 
-![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-12-3.png)<!-- -->
+![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-15-3.png)<!-- -->
 
 **`TrainingTimesLastYear` exploration**
 
@@ -339,7 +391,7 @@ train %>% ggplot(aes(x = TrainingTimesLastYear)) +
   geom_histogram(bins = 15)
 ```
 
-![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-13-1.png)<!-- -->
+![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-16-1.png)<!-- -->
 
 ``` r
 train %>% ggplot(aes(x = TrainingTimesLastYear)) + 
@@ -347,14 +399,14 @@ train %>% ggplot(aes(x = TrainingTimesLastYear)) +
   facet_wrap(~ Attrition)
 ```
 
-![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-13-2.png)<!-- -->
+![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-16-2.png)<!-- -->
 
 ``` r
 train %>% ggplot(aes(x = TrainingTimesLastYear, y = MonthlyIncome)) + 
   geom_point() + geom_smooth(method = 'lm')
 ```
 
-![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-13-3.png)<!-- -->
+![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-16-3.png)<!-- -->
 
 **`YearsAtCompany` exploration**
 
@@ -366,7 +418,7 @@ train %>% ggplot(aes(x = YearsAtCompany)) +
   geom_histogram(bins = 15)
 ```
 
-![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-14-1.png)<!-- -->
+![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-17-1.png)<!-- -->
 
 ``` r
 train %>% ggplot(aes(x = YearsAtCompany)) + 
@@ -374,14 +426,14 @@ train %>% ggplot(aes(x = YearsAtCompany)) +
   facet_wrap(~ Attrition)
 ```
 
-![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-14-2.png)<!-- -->
+![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-17-2.png)<!-- -->
 
 ``` r
 train %>% ggplot(aes(x = YearsAtCompany, y = MonthlyIncome)) + 
   geom_point() + geom_smooth(method = 'lm')
 ```
 
-![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-14-3.png)<!-- -->
+![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-17-3.png)<!-- -->
 
 **`YearsInCurrentRole` exploration**
 
@@ -393,7 +445,7 @@ train %>% ggplot(aes(x = YearsInCurrentRole)) +
   geom_histogram(bins = 15)
 ```
 
-![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-15-1.png)<!-- -->
+![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-18-1.png)<!-- -->
 
 ``` r
 train %>% ggplot(aes(x = YearsInCurrentRole)) + 
@@ -401,14 +453,14 @@ train %>% ggplot(aes(x = YearsInCurrentRole)) +
   facet_wrap(~ Attrition)
 ```
 
-![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-15-2.png)<!-- -->
+![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-18-2.png)<!-- -->
 
 ``` r
 train %>% ggplot(aes(x = YearsInCurrentRole, y = MonthlyIncome)) + 
   geom_point() + geom_smooth(method = 'lm')
 ```
 
-![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-15-3.png)<!-- -->
+![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-18-3.png)<!-- -->
 
 **`YearsSinceLastPromotion` exploration**
 
@@ -420,7 +472,7 @@ train %>% ggplot(aes(x = YearsSinceLastPromotion)) +
   geom_histogram(bins = 15)
 ```
 
-![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-16-1.png)<!-- -->
+![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-19-1.png)<!-- -->
 
 ``` r
 train %>% ggplot(aes(x = YearsSinceLastPromotion)) + 
@@ -428,14 +480,14 @@ train %>% ggplot(aes(x = YearsSinceLastPromotion)) +
   facet_wrap(~ Attrition)
 ```
 
-![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-16-2.png)<!-- -->
+![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-19-2.png)<!-- -->
 
 ``` r
 train %>% ggplot(aes(x = YearsSinceLastPromotion, y = MonthlyIncome)) + 
   geom_point() + geom_smooth(method = 'lm')
 ```
 
-![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-16-3.png)<!-- -->
+![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-19-3.png)<!-- -->
 
 **`YearsWithCurrManager` exploration**
 
@@ -447,7 +499,7 @@ train %>% ggplot(aes(x = YearsWithCurrManager)) +
   geom_histogram(bins = 15)
 ```
 
-![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-17-1.png)<!-- -->
+![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-20-1.png)<!-- -->
 
 ``` r
 train %>% ggplot(aes(x = YearsWithCurrManager)) + 
@@ -455,14 +507,14 @@ train %>% ggplot(aes(x = YearsWithCurrManager)) +
   facet_wrap(~ Attrition)
 ```
 
-![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-17-2.png)<!-- -->
+![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-20-2.png)<!-- -->
 
 ``` r
 train %>% ggplot(aes(x = YearsWithCurrManager, y = MonthlyIncome)) + 
   geom_point() + geom_smooth(method = 'lm')
 ```
 
-![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-17-3.png)<!-- -->
+![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-20-3.png)<!-- -->
 
 ## Multivariate Exploration
 
@@ -483,7 +535,7 @@ train %>%
   ggpairs()
 ```
 
-![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-18-1.png)<!-- -->
+![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-21-1.png)<!-- -->
 
 **Look at log of MonthlyIncome `logMI` because MonthlyIncome is right
 skewed**
@@ -495,7 +547,7 @@ train %>%
   ggpairs()
 ```
 
-![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-19-1.png)<!-- -->
+![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-22-1.png)<!-- -->
 
 **Close up of MonthlyIncome and highest correlated features**
 
@@ -509,28 +561,61 @@ train %>%
   ggpairs()
 ```
 
-![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-20-1.png)<!-- -->
+![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-23-1.png)<!-- -->
+
+From the plot above, several of the variables appear to be linearly
+related: `YearsAtCompany` vs `YearsWithCurrManager`,
+`YearsInCurrentRole` and `YearsSinceLastPromotion`. This could be an
+interesting trend in the data.
 
 ``` r
-train %>%
+p1 <- train %>% filter(YearsAtCompany > 0) %>%
   ggplot(aes(x = YearsWithCurrManager, y = YearsAtCompany)) + 
   geom_point() + geom_smooth(method = 'lm')
-```
-
-![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-21-1.png)<!-- -->
-
-``` r
-train %>%
+p2 <- train %>% filter(YearsAtCompany > 0) %>%
   ggplot(aes(x = YearsInCurrentRole, y = YearsAtCompany)) + 
   geom_point() + geom_smooth(method = 'lm')
-```
-
-![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-21-2.png)<!-- -->
-
-``` r
-train %>%
+p3 <- train %>% filter(YearsAtCompany > 0) %>%
   ggplot(aes(x = YearsSinceLastPromotion, y = YearsAtCompany)) + 
   geom_point() + geom_smooth(method = 'lm')
+grid.arrange(p1,p2,p3, ncol = 2)
 ```
 
-![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-21-3.png)<!-- -->
+![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-24-1.png)<!-- -->
+
+``` r
+m.YearsAtCompany <- train %>% filter(YearsAtCompany > 0) %>% lm(log(YearsAtCompany) ~ YearsSinceLastPromotion +
+                         YearsInCurrentRole +
+                         YearsWithCurrManager, data = .)
+summary(m.YearsAtCompany)
+```
+
+    ## 
+    ## Call:
+    ## lm(formula = log(YearsAtCompany) ~ YearsSinceLastPromotion + 
+    ##     YearsInCurrentRole + YearsWithCurrManager, data = .)
+    ## 
+    ## Residuals:
+    ##      Min       1Q   Median       3Q      Max 
+    ## -1.13397 -0.36114  0.02062  0.30107  1.57553 
+    ## 
+    ## Coefficients:
+    ##                         Estimate Std. Error t value Pr(>|t|)    
+    ## (Intercept)             0.608360   0.024460  24.872  < 2e-16 ***
+    ## YearsSinceLastPromotion 0.022474   0.005623   3.997 6.99e-05 ***
+    ## YearsInCurrentRole      0.108390   0.006035  17.960  < 2e-16 ***
+    ## YearsWithCurrManager    0.115189   0.005946  19.373  < 2e-16 ***
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## Residual standard error: 0.4311 on 838 degrees of freedom
+    ## Multiple R-squared:  0.767,  Adjusted R-squared:  0.7662 
+    ## F-statistic: 919.7 on 3 and 838 DF,  p-value: < 2.2e-16
+
+``` r
+train %>% filter(YearsAtCompany > 0) %>%basic.fit.plots(., m.YearsAtCompany)
+```
+
+![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-25-1.png)<!-- -->
+
+## Categorical Sandbox

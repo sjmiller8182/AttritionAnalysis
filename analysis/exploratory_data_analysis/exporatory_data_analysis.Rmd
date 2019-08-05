@@ -19,9 +19,14 @@ library(naniar)
 library(Hmisc)
 library(GGally)
 library(gridExtra)
+library(RColorBrewer)
+library(gplots)
+library(corrplot)
+library(ggthemes)
 
 # import helper functions
 source('../helper/data_munging.R')
+source('../helper/visual.R')
 
 # read in data
 train <- read_csv('../data/CaseStudy2-data_train.csv')
@@ -89,6 +94,38 @@ train.corToMI <- data.frame(flattenCorrMatrix(correlation.matrix$r, correlation.
 kable(train.corToMI)
 ```
 
+```{r, fig.height = 15, fig.width = 15}
+heatmap.cor <- function(df, palette){
+  df %>%
+    keep(is.numeric) %>%
+    drop_na() %>%
+    cor %>%
+    heatmap.2(col = palette,
+              density.info = 'none', trace = 'none',
+              dendrogram = c('both'), symm = F,
+              symkey = T, symbreaks = T, scale = 'none',
+              key = T)
+}
+my_p <- colorRampPalette(c('red','white','black'))(n = 299)
+heatmap.cor(train.numeric, my_p)
+```
+
+```{r, fig.height = 10, fig.width = 10}
+heatmap.cor <- function(df){
+  df %>%
+    keep(is.numeric) %>%
+    drop_na() %>%
+    cor %>%
+    corrplot( addCoef.col = 'white',
+             number.digits = 2,
+             number.cex = 0.5,
+             method = 'square',
+             )
+}
+heatmap.cor(train.numeric)
+```
+
+
 **Variance of Features**
 
 The following table ranks features in order of descending standard deviation.
@@ -106,6 +143,17 @@ temp.table <- train %>%
 names(temp.table) <- c('Feature','Standard Deviation')
 kable(temp.table)
 ```
+
+**Density Plots of All Numeric Features**
+
+```{r, fig.height = 15, fig.width = 15}
+train %>% keep(is.numeric) %>% 
+  gather() %>% 
+  ggplot(aes(x = value)) + 
+  facet_wrap(~ key, scales = 'free') + 
+  geom_density() 
+```
+
 
 
 **`Age` exploration**
@@ -320,26 +368,66 @@ train %>%
 From the plot above, several of the variables appear to be linearly related: `YearsAtCompany` vs `YearsWithCurrManager`, `YearsInCurrentRole` and `YearsSinceLastPromotion`. This could be an interesting trend in the data.
 
 ```{r, message=FALSE}
-p1 <- train %>%
+p1 <- train %>% filter(YearsAtCompany > 0) %>%
   ggplot(aes(x = YearsWithCurrManager, y = YearsAtCompany)) + 
   geom_point() + geom_smooth(method = 'lm')
-p2 <- train %>%
+p2 <- train %>% filter(YearsAtCompany > 0) %>%
   ggplot(aes(x = YearsInCurrentRole, y = YearsAtCompany)) + 
   geom_point() + geom_smooth(method = 'lm')
-p3 <- train %>%
+p3 <- train %>% filter(YearsAtCompany > 0) %>%
   ggplot(aes(x = YearsSinceLastPromotion, y = YearsAtCompany)) + 
   geom_point() + geom_smooth(method = 'lm')
 grid.arrange(p1,p2,p3, ncol = 2)
 ```
 
+```{r}
+m.YearsAtCompany <- train %>% filter(YearsAtCompany > 0) %>% lm(log(YearsAtCompany) ~ YearsSinceLastPromotion +
+                         YearsInCurrentRole +
+                         YearsWithCurrManager, data = .)
+summary(m.YearsAtCompany)
+train %>% filter(YearsAtCompany > 0) %>%basic.fit.plots(., m.YearsAtCompany)
+```
 
 
+## Categorical Sandbox
+
+```{r}
+train %>% keep(is.character) %>% names()
+```
 
 
+```{r}
+train %>% 
+  ggplot(aes(x = Department,
+             y = MonthlyIncome,
+             fill = Department)) +
+  geom_boxplot() + 
+  scale_fill_few(palette = 'Dark') + 
+  theme_few()
+```
+
+```{r}
+train %>% 
+  ggplot(aes(x = Gender,
+             y = MonthlyIncome,
+             fill = Gender)) +
+  geom_boxplot() + 
+  scale_fill_few(palette = 'Dark') + 
+  theme_few()
+```
+
+```{r}
+train %>% 
+  ggplot(aes(x = Gender,
+             y = MonthlyIncome,
+             fill = Gender)) +
+  geom_violin() + 
+  scale_fill_few(palette = 'Dark') + 
+  theme_few()
+```
 
 
-
-
+## classification
 
 
 
