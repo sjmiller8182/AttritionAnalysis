@@ -16,6 +16,7 @@ library(gridExtra)
 library(RColorBrewer)
 library(gplots)
 library(corrplot)
+library(ggthemes)
 
 # import helper functions
 source('../helper/data_munging.R')
@@ -73,6 +74,14 @@ train %>% ggplot(aes(x = MonthlyIncome)) +
 
 ![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-2-1.png)<!-- -->
 
+``` r
+# histogram of MonthlyIncome
+train %>% ggplot(aes(x = log(MonthlyIncome))) +
+  geom_histogram(bins = 15)
+```
+
+![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-2-2.png)<!-- -->
+
 A bar plot of Attrition reveals that the response variable is highly
 imbalanced.
 
@@ -94,8 +103,6 @@ features.numeric <- c('DailyRate', 'DistanceFromHome', 'Age', 'HourlyRate', 'Mon
            'NumCompaniesWorked','PercentSalaryHike', 'TotalWorkingYears', 'TrainingTimesLastYear',
            'YearsAtCompany','YearsInCurrentRole','YearsSinceLastPromotion', 'YearsWithCurrManager')
 ```
-
-## Univariate Analysis
 
 Explore features in isolation and the relationship between features and
 the response variables.
@@ -132,23 +139,10 @@ kable(train.corToMI)
 | HourlyRate       | MonthlyIncome           | 0.0023912 | 0.9438534 |
 | DailyRate        | MonthlyIncome           | 0.0000879 | 0.9979342 |
 
-``` r
-heatmap.cor <- function(df, palette){
-  df %>%
-    keep(is.numeric) %>%
-    drop_na() %>%
-    cor %>%
-    heatmap.2(col = palette,
-              density.info = 'none', trace = 'none',
-              dendrogram = c('both'), symm = F,
-              symkey = T, symbreaks = T, scale = 'none',
-              key = T)
-}
-my_p <- colorRampPalette(c('red','white','black'))(n = 299)
-heatmap.cor(train.numeric, my_p)
-```
+**Correlation Heatmap**
 
-![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
+`TotalworkingYears`, `Age`, `YearsAtCompany`, `YearsInCurrentRole`, and
+`YearsWithCurrentManager`.
 
 ``` r
 heatmap.cor <- function(df){
@@ -159,13 +153,12 @@ heatmap.cor <- function(df){
     corrplot( addCoef.col = 'white',
              number.digits = 2,
              number.cex = 0.5,
-             method = 'square',
-             )
+             method = 'square')
 }
 heatmap.cor(train.numeric)
 ```
 
-![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
+![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
 
 **Variance of Features**
 
@@ -213,7 +206,7 @@ train %>% keep(is.numeric) %>%
   geom_density() 
 ```
 
-![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
+![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->
 
 **`Age` exploration**
 
@@ -225,7 +218,7 @@ train %>% ggplot(aes(x = Age)) +
   geom_histogram(bins = 15)
 ```
 
-![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
+![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
 
 ``` r
 train %>% ggplot(aes(x = Age)) + 
@@ -233,14 +226,14 @@ train %>% ggplot(aes(x = Age)) +
   facet_wrap(~ Attrition)
 ```
 
-![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-10-2.png)<!-- -->
+![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-9-2.png)<!-- -->
 
 ``` r
 train %>% ggplot(aes(x = Age, y = MonthlyIncome)) + 
   geom_point() + geom_smooth(method = 'lm')
 ```
 
-![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-10-3.png)<!-- -->
+![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-9-3.png)<!-- -->
 
 **`DailyRate` exploration**
 
@@ -252,7 +245,7 @@ train %>% ggplot(aes(x = DailyRate)) +
   geom_histogram(bins = 15)
 ```
 
-![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-11-1.png)<!-- -->
+![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
 
 ``` r
 train %>% ggplot(aes(x = DailyRate)) + 
@@ -260,14 +253,14 @@ train %>% ggplot(aes(x = DailyRate)) +
   facet_wrap(~ Attrition)
 ```
 
-![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-11-2.png)<!-- -->
+![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-10-2.png)<!-- -->
 
 ``` r
 train %>% ggplot(aes(x = DailyRate, y = MonthlyIncome)) + 
   geom_point() + geom_smooth(method = 'lm')
 ```
 
-![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-11-3.png)<!-- -->
+![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-10-3.png)<!-- -->
 
 **`DistanceFromHome` exploration**
 
@@ -279,7 +272,7 @@ train %>% ggplot(aes(x = DistanceFromHome)) +
   geom_histogram(bins = 15)
 ```
 
-![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->
+![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-11-1.png)<!-- -->
 
 ``` r
 train %>% ggplot(aes(x = DistanceFromHome)) + 
@@ -287,14 +280,14 @@ train %>% ggplot(aes(x = DistanceFromHome)) +
   facet_wrap(~ Attrition)
 ```
 
-![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-12-2.png)<!-- -->
+![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-11-2.png)<!-- -->
 
 ``` r
 train %>% ggplot(aes(x = DistanceFromHome, y = MonthlyIncome)) + 
   geom_point() + geom_smooth(method = 'lm')
 ```
 
-![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-12-3.png)<!-- -->
+![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-11-3.png)<!-- -->
 
 **`MonthlyRate` exploration**
 
@@ -306,7 +299,7 @@ train %>% ggplot(aes(x = MonthlyRate)) +
   geom_histogram(bins = 15)
 ```
 
-![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-13-1.png)<!-- -->
+![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->
 
 ``` r
 train %>% ggplot(aes(x = MonthlyRate)) + 
@@ -314,14 +307,14 @@ train %>% ggplot(aes(x = MonthlyRate)) +
   facet_wrap(~ Attrition)
 ```
 
-![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-13-2.png)<!-- -->
+![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-12-2.png)<!-- -->
 
 ``` r
 train %>% ggplot(aes(x = MonthlyRate, y = MonthlyIncome)) + 
   geom_point() + geom_smooth(method = 'lm')
 ```
 
-![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-13-3.png)<!-- -->
+![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-12-3.png)<!-- -->
 
 **`PercentSalaryHike` exploration**
 
@@ -335,7 +328,7 @@ train %>% ggplot(aes(x = PercentSalaryHike)) +
 
     ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
 
-![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-14-1.png)<!-- -->
+![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-13-1.png)<!-- -->
 
 ``` r
 train %>% ggplot(aes(x = PercentSalaryHike)) + 
@@ -345,14 +338,14 @@ train %>% ggplot(aes(x = PercentSalaryHike)) +
 
     ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
 
-![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-14-2.png)<!-- -->
+![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-13-2.png)<!-- -->
 
 ``` r
 train %>% ggplot(aes(x = PercentSalaryHike, y = MonthlyIncome)) + 
   geom_point() + geom_smooth(method = 'lm')
 ```
 
-![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-14-3.png)<!-- -->
+![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-13-3.png)<!-- -->
 
 **`TotalWorkingYears` exploration**
 
@@ -364,7 +357,7 @@ train %>% ggplot(aes(x = TotalWorkingYears)) +
   geom_histogram(bins = 15)
 ```
 
-![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-15-1.png)<!-- -->
+![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-14-1.png)<!-- -->
 
 ``` r
 train %>% ggplot(aes(x = TotalWorkingYears)) + 
@@ -372,14 +365,14 @@ train %>% ggplot(aes(x = TotalWorkingYears)) +
   facet_wrap(~ Attrition)
 ```
 
-![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-15-2.png)<!-- -->
+![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-14-2.png)<!-- -->
 
 ``` r
 train %>% ggplot(aes(x = TotalWorkingYears, y = MonthlyIncome)) + 
   geom_point() + geom_smooth(method = 'lm')
 ```
 
-![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-15-3.png)<!-- -->
+![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-14-3.png)<!-- -->
 
 **`TrainingTimesLastYear` exploration**
 
@@ -391,7 +384,7 @@ train %>% ggplot(aes(x = TrainingTimesLastYear)) +
   geom_histogram(bins = 15)
 ```
 
-![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-16-1.png)<!-- -->
+![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-15-1.png)<!-- -->
 
 ``` r
 train %>% ggplot(aes(x = TrainingTimesLastYear)) + 
@@ -399,14 +392,14 @@ train %>% ggplot(aes(x = TrainingTimesLastYear)) +
   facet_wrap(~ Attrition)
 ```
 
-![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-16-2.png)<!-- -->
+![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-15-2.png)<!-- -->
 
 ``` r
 train %>% ggplot(aes(x = TrainingTimesLastYear, y = MonthlyIncome)) + 
   geom_point() + geom_smooth(method = 'lm')
 ```
 
-![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-16-3.png)<!-- -->
+![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-15-3.png)<!-- -->
 
 **`YearsAtCompany` exploration**
 
@@ -418,7 +411,7 @@ train %>% ggplot(aes(x = YearsAtCompany)) +
   geom_histogram(bins = 15)
 ```
 
-![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-17-1.png)<!-- -->
+![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-16-1.png)<!-- -->
 
 ``` r
 train %>% ggplot(aes(x = YearsAtCompany)) + 
@@ -426,14 +419,14 @@ train %>% ggplot(aes(x = YearsAtCompany)) +
   facet_wrap(~ Attrition)
 ```
 
-![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-17-2.png)<!-- -->
+![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-16-2.png)<!-- -->
 
 ``` r
 train %>% ggplot(aes(x = YearsAtCompany, y = MonthlyIncome)) + 
   geom_point() + geom_smooth(method = 'lm')
 ```
 
-![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-17-3.png)<!-- -->
+![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-16-3.png)<!-- -->
 
 **`YearsInCurrentRole` exploration**
 
@@ -445,7 +438,7 @@ train %>% ggplot(aes(x = YearsInCurrentRole)) +
   geom_histogram(bins = 15)
 ```
 
-![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-18-1.png)<!-- -->
+![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-17-1.png)<!-- -->
 
 ``` r
 train %>% ggplot(aes(x = YearsInCurrentRole)) + 
@@ -453,14 +446,14 @@ train %>% ggplot(aes(x = YearsInCurrentRole)) +
   facet_wrap(~ Attrition)
 ```
 
-![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-18-2.png)<!-- -->
+![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-17-2.png)<!-- -->
 
 ``` r
 train %>% ggplot(aes(x = YearsInCurrentRole, y = MonthlyIncome)) + 
   geom_point() + geom_smooth(method = 'lm')
 ```
 
-![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-18-3.png)<!-- -->
+![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-17-3.png)<!-- -->
 
 **`YearsSinceLastPromotion` exploration**
 
@@ -472,7 +465,7 @@ train %>% ggplot(aes(x = YearsSinceLastPromotion)) +
   geom_histogram(bins = 15)
 ```
 
-![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-19-1.png)<!-- -->
+![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-18-1.png)<!-- -->
 
 ``` r
 train %>% ggplot(aes(x = YearsSinceLastPromotion)) + 
@@ -480,14 +473,14 @@ train %>% ggplot(aes(x = YearsSinceLastPromotion)) +
   facet_wrap(~ Attrition)
 ```
 
-![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-19-2.png)<!-- -->
+![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-18-2.png)<!-- -->
 
 ``` r
 train %>% ggplot(aes(x = YearsSinceLastPromotion, y = MonthlyIncome)) + 
   geom_point() + geom_smooth(method = 'lm')
 ```
 
-![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-19-3.png)<!-- -->
+![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-18-3.png)<!-- -->
 
 **`YearsWithCurrManager` exploration**
 
@@ -499,7 +492,7 @@ train %>% ggplot(aes(x = YearsWithCurrManager)) +
   geom_histogram(bins = 15)
 ```
 
-![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-20-1.png)<!-- -->
+![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-19-1.png)<!-- -->
 
 ``` r
 train %>% ggplot(aes(x = YearsWithCurrManager)) + 
@@ -507,14 +500,14 @@ train %>% ggplot(aes(x = YearsWithCurrManager)) +
   facet_wrap(~ Attrition)
 ```
 
-![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-20-2.png)<!-- -->
+![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-19-2.png)<!-- -->
 
 ``` r
 train %>% ggplot(aes(x = YearsWithCurrManager, y = MonthlyIncome)) + 
   geom_point() + geom_smooth(method = 'lm')
 ```
 
-![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-20-3.png)<!-- -->
+![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-19-3.png)<!-- -->
 
 ## Multivariate Exploration
 
@@ -535,7 +528,7 @@ train %>%
   ggpairs()
 ```
 
-![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-21-1.png)<!-- -->
+![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-20-1.png)<!-- -->
 
 **Look at log of MonthlyIncome `logMI` because MonthlyIncome is right
 skewed**
@@ -547,7 +540,7 @@ train %>%
   ggpairs()
 ```
 
-![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-22-1.png)<!-- -->
+![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-21-1.png)<!-- -->
 
 **Close up of MonthlyIncome and highest correlated features**
 
@@ -561,7 +554,7 @@ train %>%
   ggpairs()
 ```
 
-![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-23-1.png)<!-- -->
+![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-22-1.png)<!-- -->
 
 From the plot above, several of the variables appear to be linearly
 related: `YearsAtCompany` vs `YearsWithCurrManager`,
@@ -581,12 +574,13 @@ p3 <- train %>% filter(YearsAtCompany > 0) %>%
 grid.arrange(p1,p2,p3, ncol = 2)
 ```
 
-![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-24-1.png)<!-- -->
+![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-23-1.png)<!-- -->
 
 ``` r
-m.YearsAtCompany <- train %>% filter(YearsAtCompany > 0) %>% lm(log(YearsAtCompany) ~ YearsSinceLastPromotion +
-                         YearsInCurrentRole +
-                         YearsWithCurrManager, data = .)
+m.YearsAtCompany <- train %>% 
+  filter(YearsAtCompany > 0) %>% 
+  lm(log(YearsAtCompany) ~ YearsSinceLastPromotion +  YearsInCurrentRole + YearsWithCurrManager, data = .)
+
 summary(m.YearsAtCompany)
 ```
 
@@ -616,6 +610,779 @@ summary(m.YearsAtCompany)
 train %>% filter(YearsAtCompany > 0) %>%basic.fit.plots(., m.YearsAtCompany)
 ```
 
-![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-25-1.png)<!-- -->
+![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-24-1.png)<!-- -->
 
-## Categorical Sandbox
+# Explanatory - factor Variables
+
+Exploration of the continuous variables.
+
+For investigation of the categrical variables, we will look at variables
+correlated to monthly income. Monthly income is correlated with
+`TotalworkingYears`, `Age`, `YearsAtCompany`, `YearsInCurrentRole`, and
+`YearsWithCurrentManager`.
+
+``` r
+# create a vector of numeric features
+features.factor <- c('BusinessTravel', 'Department', 'Education', 'EducationField', 'EmployeeNumber', 'EnvironmentSatisfaction', 'Gender', 'JobInvolvement', 'JobLevel', 'JobRole', 'JobSatisfaction', 'MaritalStatus', 'OverTime', 'PerformanceRating', 'RelationshipSatisfaction', 'StockOptionLevel', 'WorkLifeBalance')
+
+# factor categorical variables
+train[, features.factor] <- lapply(train[, features.factor], as.factor)
+```
+
+## BusinessTravel
+
+``` r
+btMI <- train %>% 
+  ggplot(aes(x = BusinessTravel,
+             y = log(MonthlyIncome),
+             fill = BusinessTravel)) +
+  geom_boxplot() + 
+  scale_fill_few(palette = 'Dark') + 
+  theme_few()
+
+btAg <- train %>% 
+  ggplot(aes(x = BusinessTravel,
+             y = Age,
+             fill = BusinessTravel)) +
+  geom_boxplot() + 
+  scale_fill_few(palette = 'Dark') + 
+  theme_few()
+
+btYAC <- train %>% 
+  ggplot(aes(x = BusinessTravel,
+             y = YearsAtCompany,
+             fill = BusinessTravel)) +
+  geom_boxplot() + 
+  scale_fill_few(palette = 'Dark') + 
+  theme_few()
+
+btYCM <- train %>% 
+  ggplot(aes(x = BusinessTravel,
+             y = YearsWithCurrManager,
+             fill = BusinessTravel)) +
+  geom_boxplot() + 
+  scale_fill_few(palette = 'Dark') + 
+  theme_few()
+
+btTWY <- train %>% 
+  ggplot(aes(x = BusinessTravel,
+             y = TotalWorkingYears,
+             fill = BusinessTravel)) +
+  geom_boxplot() + 
+  scale_fill_few(palette = 'Dark') + 
+  theme_few()
+
+grid.arrange(btMI, btAg, btYAC, btYCM, btTWY)
+```
+
+![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-26-1.png)<!-- -->
+
+``` r
+btMI <- train %>% 
+  ggplot(aes(x = Gender,
+             y = log(MonthlyIncome),
+             fill = Gender)) +
+  geom_boxplot() + 
+  scale_fill_few(palette = 'Dark') + 
+  theme_few()
+
+btAg <- train %>% 
+  ggplot(aes(x = Gender,
+             y = Age,
+             fill = Gender)) +
+  geom_boxplot() + 
+  scale_fill_few(palette = 'Dark') + 
+  theme_few()
+
+btYAC <- train %>% 
+  ggplot(aes(x = Gender,
+             y = YearsAtCompany,
+             fill = Gender)) +
+  geom_boxplot() + 
+  scale_fill_few(palette = 'Dark') + 
+  theme_few()
+
+btYCM <- train %>% 
+  ggplot(aes(x = Gender,
+             y = YearsWithCurrManager,
+             fill = Gender)) +
+  geom_boxplot() + 
+  scale_fill_few(palette = 'Dark') + 
+  theme_few()
+
+btTWY <- train %>% 
+  ggplot(aes(x = Gender,
+             y = TotalWorkingYears,
+             fill = Gender)) +
+  geom_boxplot() + 
+  scale_fill_few(palette = 'Dark') + 
+  theme_few()
+
+grid.arrange(btMI, btAg, btYAC, btYCM, btTWY)
+```
+
+![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-27-1.png)<!-- -->
+
+``` r
+btMI <- train %>% 
+  ggplot(aes(x = Department,
+             y = log(MonthlyIncome),
+             fill = Department)) +
+  geom_boxplot() + 
+  scale_fill_few(palette = 'Dark') + 
+  theme_few()
+
+btAg <- train %>% 
+  ggplot(aes(x = Department,
+             y = Age,
+             fill = Department)) +
+  geom_boxplot() + 
+  scale_fill_few(palette = 'Dark') + 
+  theme_few()
+
+btYAC <- train %>% 
+  ggplot(aes(x = Department,
+             y = YearsAtCompany,
+             fill = Department)) +
+  geom_boxplot() + 
+  scale_fill_few(palette = 'Dark') + 
+  theme_few()
+
+btYCM <- train %>% 
+  ggplot(aes(x = Department,
+             y = YearsWithCurrManager,
+             fill = Department)) +
+  geom_boxplot() + 
+  scale_fill_few(palette = 'Dark') + 
+  theme_few()
+
+btTWY <- train %>% 
+  ggplot(aes(x = Department,
+             y = TotalWorkingYears,
+             fill = Department)) +
+  geom_boxplot() + 
+  scale_fill_few(palette = 'Dark') + 
+  theme_few()
+
+grid.arrange(btMI, btAg, btYAC, btYCM, btTWY)
+```
+
+![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-28-1.png)<!-- -->
+
+``` r
+btMI <- train %>% 
+  ggplot(aes(x = Education,
+             y = log(MonthlyIncome),
+             fill = Education)) +
+  geom_boxplot() + 
+  scale_fill_few(palette = 'Dark') + 
+  theme_few()
+
+btAg <- train %>% 
+  ggplot(aes(x = Education,
+             y = Age,
+             fill = Education)) +
+  geom_boxplot() + 
+  scale_fill_few(palette = 'Dark') + 
+  theme_few()
+
+btYAC <- train %>% 
+  ggplot(aes(x = Education,
+             y = YearsAtCompany,
+             fill = Education)) +
+  geom_boxplot() + 
+  scale_fill_few(palette = 'Dark') + 
+  theme_few()
+
+btYCM <- train %>% 
+  ggplot(aes(x = Education,
+             y = YearsWithCurrManager,
+             fill = Education)) +
+  geom_boxplot() + 
+  scale_fill_few(palette = 'Dark') + 
+  theme_few()
+
+btTWY <- train %>% 
+  ggplot(aes(x = Education,
+             y = TotalWorkingYears,
+             fill = Education)) +
+  geom_boxplot() + 
+  scale_fill_few(palette = 'Dark') + 
+  theme_few()
+
+grid.arrange(btMI, btAg, btYAC, btYCM, btTWY)
+```
+
+![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-29-1.png)<!-- -->
+
+``` r
+btMI <- train %>% 
+  ggplot(aes(x = EducationField,
+             y = log(MonthlyIncome),
+             fill = EducationField)) +
+  geom_boxplot() + 
+  scale_fill_few(palette = 'Dark') + 
+  theme_few()
+
+btAg <- train %>% 
+  ggplot(aes(x = EducationField,
+             y = Age,
+             fill = EducationField)) +
+  geom_boxplot() + 
+  scale_fill_few(palette = 'Dark') + 
+  theme_few()
+
+btYAC <- train %>% 
+  ggplot(aes(x = EducationField,
+             y = YearsAtCompany,
+             fill = EducationField)) +
+  geom_boxplot() + 
+  scale_fill_few(palette = 'Dark') + 
+  theme_few()
+
+btYCM <- train %>% 
+  ggplot(aes(x = EducationField,
+             y = YearsWithCurrManager,
+             fill = EducationField)) +
+  geom_boxplot() + 
+  scale_fill_few(palette = 'Dark') + 
+  theme_few()
+
+btTWY <- train %>% 
+  ggplot(aes(x = EducationField,
+             y = TotalWorkingYears,
+             fill = EducationField)) +
+  geom_boxplot() + 
+  scale_fill_few(palette = 'Dark') + 
+  theme_few()
+
+grid.arrange(btMI, btAg, btYAC, btYCM, btTWY)
+```
+
+![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-30-1.png)<!-- -->
+
+``` r
+btMI <- train %>% 
+  ggplot(aes(x = EnvironmentSatisfaction,
+             y = log(MonthlyIncome),
+             fill = EnvironmentSatisfaction)) +
+  geom_boxplot() + 
+  scale_fill_few(palette = 'Dark') + 
+  theme_few()
+
+btAg <- train %>% 
+  ggplot(aes(x = EnvironmentSatisfaction,
+             y = Age,
+             fill = EnvironmentSatisfaction)) +
+  geom_boxplot() + 
+  scale_fill_few(palette = 'Dark') + 
+  theme_few()
+
+btYAC <- train %>% 
+  ggplot(aes(x = EnvironmentSatisfaction,
+             y = YearsAtCompany,
+             fill = EnvironmentSatisfaction)) +
+  geom_boxplot() + 
+  scale_fill_few(palette = 'Dark') + 
+  theme_few()
+
+btYCM <- train %>% 
+  ggplot(aes(x = EnvironmentSatisfaction,
+             y = YearsWithCurrManager,
+             fill = EnvironmentSatisfaction)) +
+  geom_boxplot() + 
+  scale_fill_few(palette = 'Dark') + 
+  theme_few()
+
+btTWY <- train %>% 
+  ggplot(aes(x = EnvironmentSatisfaction,
+             y = TotalWorkingYears,
+             fill = EnvironmentSatisfaction)) +
+  geom_boxplot() + 
+  scale_fill_few(palette = 'Dark') + 
+  theme_few()
+
+grid.arrange(btMI, btAg, btYAC, btYCM, btTWY)
+```
+
+![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-31-1.png)<!-- -->
+
+``` r
+btMI <- train %>% 
+  ggplot(aes(x = JobInvolvement,
+             y = log(MonthlyIncome),
+             fill = JobInvolvement)) +
+  geom_boxplot() + 
+  scale_fill_few(palette = 'Dark') + 
+  theme_few()
+
+btAg <- train %>% 
+  ggplot(aes(x = JobInvolvement,
+             y = Age,
+             fill = JobInvolvement)) +
+  geom_boxplot() + 
+  scale_fill_few(palette = 'Dark') + 
+  theme_few()
+
+btYAC <- train %>% 
+  ggplot(aes(x = JobInvolvement,
+             y = YearsAtCompany,
+             fill = JobInvolvement)) +
+  geom_boxplot() + 
+  scale_fill_few(palette = 'Dark') + 
+  theme_few()
+
+btYCM <- train %>% 
+  ggplot(aes(x = JobInvolvement,
+             y = YearsWithCurrManager,
+             fill = JobInvolvement)) +
+  geom_boxplot() + 
+  scale_fill_few(palette = 'Dark') + 
+  theme_few()
+
+btTWY <- train %>% 
+  ggplot(aes(x = JobInvolvement,
+             y = TotalWorkingYears,
+             fill = JobInvolvement)) +
+  geom_boxplot() + 
+  scale_fill_few(palette = 'Dark') + 
+  theme_few()
+
+grid.arrange(btMI, btAg, btYAC, btYCM, btTWY)
+```
+
+![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-32-1.png)<!-- -->
+
+``` r
+btMI <- train %>% 
+  ggplot(aes(x = JobLevel,
+             y = log(MonthlyIncome),
+             fill = JobLevel)) +
+  geom_boxplot() + 
+  scale_fill_few(palette = 'Dark') + 
+  theme_few()
+
+btAg <- train %>% 
+  ggplot(aes(x = JobLevel,
+             y = Age,
+             fill = JobLevel)) +
+  geom_boxplot() + 
+  scale_fill_few(palette = 'Dark') + 
+  theme_few()
+
+btYAC <- train %>% 
+  ggplot(aes(x = JobLevel,
+             y = YearsAtCompany,
+             fill = JobLevel)) +
+  geom_boxplot() + 
+  scale_fill_few(palette = 'Dark') + 
+  theme_few()
+
+btYCM <- train %>% 
+  ggplot(aes(x = JobLevel,
+             y = YearsWithCurrManager,
+             fill = JobLevel)) +
+  geom_boxplot() + 
+  scale_fill_few(palette = 'Dark') + 
+  theme_few()
+
+btTWY <- train %>% 
+  ggplot(aes(x = JobLevel,
+             y = TotalWorkingYears,
+             fill = JobLevel)) +
+  geom_boxplot() + 
+  scale_fill_few(palette = 'Dark') + 
+  theme_few()
+
+grid.arrange(btMI, btAg, btYAC, btYCM, btTWY)
+```
+
+![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-33-1.png)<!-- -->
+
+``` r
+btMI <- train %>% 
+  ggplot(aes(x = JobRole,
+             y = log(MonthlyIncome),
+             fill = JobRole)) +
+  geom_boxplot() + 
+  scale_fill_few(palette = 'Dark') + 
+  theme_few() + 
+  theme(axis.text.x = element_text(angle = 60, hjust = 1))
+
+btAg <- train %>% 
+  ggplot(aes(x = JobRole,
+             y = Age,
+             fill = JobRole)) +
+  geom_boxplot() + 
+  scale_fill_few(palette = 'Dark') + 
+  theme_few() + 
+  theme(axis.text.x = element_text(angle = 60, hjust = 1))
+
+btYAC <- train %>% 
+  ggplot(aes(x = JobRole,
+             y = YearsAtCompany,
+             fill = JobRole)) +
+  geom_boxplot() + 
+  scale_fill_few(palette = 'Dark') + 
+  theme_few() + 
+  theme(axis.text.x = element_text(angle = 60, hjust = 1))
+
+btYCM <- train %>% 
+  ggplot(aes(x = JobRole,
+             y = YearsWithCurrManager,
+             fill = JobRole)) +
+  geom_boxplot() + 
+  scale_fill_few(palette = 'Dark') + 
+  theme_few() + 
+  theme(axis.text.x = element_text(angle = 60, hjust = 1))
+
+btTWY <- train %>% 
+  ggplot(aes(x = JobRole,
+             y = TotalWorkingYears,
+             fill = JobRole)) +
+  geom_boxplot() + 
+  scale_fill_few(palette = 'Dark') + 
+  theme_few() + 
+  theme(axis.text.x = element_text(angle = 60, hjust = 1))
+
+grid.arrange(btMI, btAg, btYAC, btYCM, btTWY)
+```
+
+    ## Warning in check_pal_n(n, max_n): This palette can handle a maximum of 8
+    ## values.You have supplied 9.
+    
+    ## Warning in check_pal_n(n, max_n): This palette can handle a maximum of 8
+    ## values.You have supplied 9.
+    
+    ## Warning in check_pal_n(n, max_n): This palette can handle a maximum of 8
+    ## values.You have supplied 9.
+    
+    ## Warning in check_pal_n(n, max_n): This palette can handle a maximum of 8
+    ## values.You have supplied 9.
+    
+    ## Warning in check_pal_n(n, max_n): This palette can handle a maximum of 8
+    ## values.You have supplied 9.
+
+![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-34-1.png)<!-- -->
+
+``` r
+btMI <- train %>% 
+  ggplot(aes(x = JobSatisfaction,
+             y = log(MonthlyIncome),
+             fill = JobSatisfaction)) +
+  geom_boxplot() + 
+  scale_fill_few(palette = 'Dark') + 
+  theme_few()
+
+btAg <- train %>% 
+  ggplot(aes(x = JobSatisfaction,
+             y = Age,
+             fill = JobSatisfaction)) +
+  geom_boxplot() + 
+  scale_fill_few(palette = 'Dark') + 
+  theme_few()
+
+btYAC <- train %>% 
+  ggplot(aes(x = JobSatisfaction,
+             y = YearsAtCompany,
+             fill = JobSatisfaction)) +
+  geom_boxplot() + 
+  scale_fill_few(palette = 'Dark') + 
+  theme_few()
+
+btYCM <- train %>% 
+  ggplot(aes(x = JobSatisfaction,
+             y = YearsWithCurrManager,
+             fill = JobSatisfaction)) +
+  geom_boxplot() + 
+  scale_fill_few(palette = 'Dark') + 
+  theme_few()
+
+btTWY <- train %>% 
+  ggplot(aes(x = JobSatisfaction,
+             y = TotalWorkingYears,
+             fill = JobSatisfaction)) +
+  geom_boxplot() + 
+  scale_fill_few(palette = 'Dark') + 
+  theme_few()
+
+grid.arrange(btMI, btAg, btYAC, btYCM, btTWY)
+```
+
+![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-35-1.png)<!-- -->
+
+``` r
+btMI <- train %>% 
+  ggplot(aes(x = MaritalStatus,
+             y = log(MonthlyIncome),
+             fill = MaritalStatus)) +
+  geom_boxplot() + 
+  scale_fill_few(palette = 'Dark') + 
+  theme_few()
+
+btAg <- train %>% 
+  ggplot(aes(x = MaritalStatus,
+             y = Age,
+             fill = MaritalStatus)) +
+  geom_boxplot() + 
+  scale_fill_few(palette = 'Dark') + 
+  theme_few()
+
+btYAC <- train %>% 
+  ggplot(aes(x = MaritalStatus,
+             y = YearsAtCompany,
+             fill = MaritalStatus)) +
+  geom_boxplot() + 
+  scale_fill_few(palette = 'Dark') + 
+  theme_few()
+
+btYCM <- train %>% 
+  ggplot(aes(x = MaritalStatus,
+             y = YearsWithCurrManager,
+             fill = MaritalStatus)) +
+  geom_boxplot() + 
+  scale_fill_few(palette = 'Dark') + 
+  theme_few()
+
+btTWY <- train %>% 
+  ggplot(aes(x = MaritalStatus,
+             y = TotalWorkingYears,
+             fill = MaritalStatus)) +
+  geom_boxplot() + 
+  scale_fill_few(palette = 'Dark') + 
+  theme_few()
+
+grid.arrange(btMI, btAg, btYAC, btYCM, btTWY)
+```
+
+![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-36-1.png)<!-- -->
+
+``` r
+btMI <- train %>% 
+  ggplot(aes(x = OverTime,
+             y = log(MonthlyIncome),
+             fill = OverTime)) +
+  geom_boxplot() + 
+  scale_fill_few(palette = 'Dark') + 
+  theme_few()
+
+btAg <- train %>% 
+  ggplot(aes(x = OverTime,
+             y = Age,
+             fill = OverTime)) +
+  geom_boxplot() + 
+  scale_fill_few(palette = 'Dark') + 
+  theme_few()
+
+btYAC <- train %>% 
+  ggplot(aes(x = OverTime,
+             y = YearsAtCompany,
+             fill = OverTime)) +
+  geom_boxplot() + 
+  scale_fill_few(palette = 'Dark') + 
+  theme_few()
+
+btYCM <- train %>% 
+  ggplot(aes(x = OverTime,
+             y = YearsWithCurrManager,
+             fill = OverTime)) +
+  geom_boxplot() + 
+  scale_fill_few(palette = 'Dark') + 
+  theme_few()
+
+btTWY <- train %>% 
+  ggplot(aes(x = OverTime,
+             y = TotalWorkingYears,
+             fill = OverTime)) +
+  geom_boxplot() + 
+  scale_fill_few(palette = 'Dark') + 
+  theme_few()
+
+grid.arrange(btMI, btAg, btYAC, btYCM, btTWY)
+```
+
+![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-37-1.png)<!-- -->
+
+``` r
+btMI <- train %>% 
+  ggplot(aes(x = PerformanceRating,
+             y = log(MonthlyIncome),
+             fill = PerformanceRating)) +
+  geom_boxplot() + 
+  scale_fill_few(palette = 'Dark') + 
+  theme_few()
+
+btAg <- train %>% 
+  ggplot(aes(x = PerformanceRating,
+             y = Age,
+             fill = PerformanceRating)) +
+  geom_boxplot() + 
+  scale_fill_few(palette = 'Dark') + 
+  theme_few()
+
+btYAC <- train %>% 
+  ggplot(aes(x = PerformanceRating,
+             y = YearsAtCompany,
+             fill = PerformanceRating)) +
+  geom_boxplot() + 
+  scale_fill_few(palette = 'Dark') + 
+  theme_few()
+
+btYCM <- train %>% 
+  ggplot(aes(x = PerformanceRating,
+             y = YearsWithCurrManager,
+             fill = PerformanceRating)) +
+  geom_boxplot() + 
+  scale_fill_few(palette = 'Dark') + 
+  theme_few()
+
+btTWY <- train %>% 
+  ggplot(aes(x = PerformanceRating,
+             y = TotalWorkingYears,
+             fill = PerformanceRating)) +
+  geom_boxplot() + 
+  scale_fill_few(palette = 'Dark') + 
+  theme_few()
+
+grid.arrange(btMI, btAg, btYAC, btYCM, btTWY)
+```
+
+![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-38-1.png)<!-- -->
+
+``` r
+btMI <- train %>% 
+  ggplot(aes(x = RelationshipSatisfaction,
+             y = log(MonthlyIncome),
+             fill = RelationshipSatisfaction)) +
+  geom_boxplot() + 
+  scale_fill_few(palette = 'Dark') + 
+  theme_few()
+
+btAg <- train %>% 
+  ggplot(aes(x = RelationshipSatisfaction,
+             y = Age,
+             fill = RelationshipSatisfaction)) +
+  geom_boxplot() + 
+  scale_fill_few(palette = 'Dark') + 
+  theme_few()
+
+btYAC <- train %>% 
+  ggplot(aes(x = RelationshipSatisfaction,
+             y = YearsAtCompany,
+             fill = RelationshipSatisfaction)) +
+  geom_boxplot() + 
+  scale_fill_few(palette = 'Dark') + 
+  theme_few()
+
+btYCM <- train %>% 
+  ggplot(aes(x = RelationshipSatisfaction,
+             y = YearsWithCurrManager,
+             fill = RelationshipSatisfaction)) +
+  geom_boxplot() + 
+  scale_fill_few(palette = 'Dark') + 
+  theme_few()
+
+btTWY <- train %>% 
+  ggplot(aes(x = RelationshipSatisfaction,
+             y = TotalWorkingYears,
+             fill = RelationshipSatisfaction)) +
+  geom_boxplot() + 
+  scale_fill_few(palette = 'Dark') + 
+  theme_few()
+
+grid.arrange(btMI, btAg, btYAC, btYCM, btTWY)
+```
+
+![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-39-1.png)<!-- -->
+
+``` r
+btMI <- train %>% 
+  ggplot(aes(x = StockOptionLevel,
+             y = log(MonthlyIncome),
+             fill = StockOptionLevel)) +
+  geom_boxplot() + 
+  scale_fill_few(palette = 'Dark') + 
+  theme_few()
+
+btAg <- train %>% 
+  ggplot(aes(x = StockOptionLevel,
+             y = Age,
+             fill = StockOptionLevel)) +
+  geom_boxplot() + 
+  scale_fill_few(palette = 'Dark') + 
+  theme_few()
+
+btYAC <- train %>% 
+  ggplot(aes(x = StockOptionLevel,
+             y = YearsAtCompany,
+             fill = StockOptionLevel)) +
+  geom_boxplot() + 
+  scale_fill_few(palette = 'Dark') + 
+  theme_few()
+
+btYCM <- train %>% 
+  ggplot(aes(x = StockOptionLevel,
+             y = YearsWithCurrManager,
+             fill = StockOptionLevel)) +
+  geom_boxplot() + 
+  scale_fill_few(palette = 'Dark') + 
+  theme_few()
+
+btTWY <- train %>% 
+  ggplot(aes(x = StockOptionLevel,
+             y = TotalWorkingYears,
+             fill = StockOptionLevel)) +
+  geom_boxplot() + 
+  scale_fill_few(palette = 'Dark') + 
+  theme_few()
+
+grid.arrange(btMI, btAg, btYAC, btYCM, btTWY)
+```
+
+![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-40-1.png)<!-- -->
+
+``` r
+btMI <- train %>% 
+  ggplot(aes(x = WorkLifeBalance,
+             y = log(MonthlyIncome),
+             fill = WorkLifeBalance)) +
+  geom_boxplot() + 
+  scale_fill_few(palette = 'Dark') + 
+  theme_few()
+
+btAg <- train %>% 
+  ggplot(aes(x = WorkLifeBalance,
+             y = Age,
+             fill = WorkLifeBalance)) +
+  geom_boxplot() + 
+  scale_fill_few(palette = 'Dark') + 
+  theme_few()
+
+btYAC <- train %>% 
+  ggplot(aes(x = WorkLifeBalance,
+             y = YearsAtCompany,
+             fill = WorkLifeBalance)) +
+  geom_boxplot() + 
+  scale_fill_few(palette = 'Dark') + 
+  theme_few()
+
+btYCM <- train %>% 
+  ggplot(aes(x = WorkLifeBalance,
+             y = YearsWithCurrManager,
+             fill = WorkLifeBalance)) +
+  geom_boxplot() + 
+  scale_fill_few(palette = 'Dark') + 
+  theme_few()
+
+btTWY <- train %>% 
+  ggplot(aes(x = WorkLifeBalance,
+             y = TotalWorkingYears,
+             fill = WorkLifeBalance)) +
+  geom_boxplot() + 
+  scale_fill_few(palette = 'Dark') + 
+  theme_few()
+
+grid.arrange(btMI, btAg, btYAC, btYCM, btTWY)
+```
+
+![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-41-1.png)<!-- -->
