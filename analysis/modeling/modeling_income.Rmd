@@ -1,0 +1,101 @@
+---
+title: "Modeling Income"
+author: "Stuart Miller"
+date: "August 9, 2019"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, echo=FALSE, message=FALSE}
+
+
+# import libraries
+library(knitr)
+library(tidyverse)
+library(naniar)
+library(Hmisc)
+library(GGally)
+library(gridExtra)
+library(RColorBrewer)
+library(gplots)
+library(corrplot)
+library(ggthemes)
+library(caret)
+
+set.seed(3456)
+
+# import helper functions
+source('../helper/data_munging.R')
+source('../helper/visual.R')
+
+# read in data
+train <- read_csv('../data/CaseStudy2-data_train.csv')
+```
+
+## Data Partitioning
+
+The training dataset will be split into a training set and a test set. The training set `dfTrain` will be used for model cross validation. The test set will be used for final model selection.
+
+```{r}
+# split off a test set
+trainIndex <- createDataPartition(train$MonthlyIncome , p = .75, 
+                                  list = FALSE, 
+                                  times = 1)
+dfTrain <- train[trainIndex,]
+dfTest <-  train[-trainIndex,]
+```
+
+## Model Construction
+
+From EDA, it appears that monthly income is correlated to `TotalworkingYears`, `Age`, `YearsAtCompany`, `YearsInCurrentRole`, and `YearsWithCurrentManager`.
+
+From the factors:
+
+* `JobLevel` appears to partion `TotalWorkingYears` and `MonthlyIncome` very well.
+
+
+```{r}
+#model.linear <- dfTrain %>% lm(MonthlyIncome ~ TotalWorkingYears*JobLevel + JobLevel, data = .)
+
+model.linear <- dfTrain %>% lm(MonthlyIncome ~ TotalWorkingYears:JobLevel + JobLevel + JobRole, data = .)
+
+summary(model.linear)
+
+dfTrain  %>% basic.fit.plots(., model.linear)
+```
+
+
+```{r, cv_pipe}
+
+model.formula <- MonthlyIncome ~ TotalWorkingYears:JobLevel + JobLevel + TotalWorkingYears:JobRole
+
+# Set up repeated k-fold cross-validation
+train.control <-trainControl(method = "cv", number = 5)
+# Train the model
+model.cv <-dfTrain %>% train(model.formula,
+                 data = .,
+                 method ='lm',
+                 trControl = train.control)
+# print model summary
+model.cv
+```
+
+```{r}
+model.formula <- MonthlyIncome ~ TotalWorkingYears:JobLevel + JobLevel + TotalWorkingYears:JobRole
+
+# Set up repeated k-fold cross-validation
+train.control <-trainControl(method = "cv", number = 5)
+# Train the model
+model.cv <-dfTrain %>% train(model.formula,
+                 data = .,
+                 method ='knn',
+                 trControl = train.control)
+# print model summary
+model.cv
+```
+```
+
+
