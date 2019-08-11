@@ -195,6 +195,8 @@ grid.arrange(p1,p2, ncol = 2)
 
 With the models chosen and tuned, they will be tested against a validation set to see how well the models generalize to a new set of data `dfTest`. This validation will be used for final model selection.
 
+The table below shows the RMSE for each model for the training set and the test set. Both models appear to generalize reasonably well to the new dataset. Linear regression shows a low absolute difference in RMSE between the training set and the test set.
+
 
 ```{r}
 # helper function for calculating model performance
@@ -219,6 +221,25 @@ kable(data.frame(
 
 ```
 
+## Output Data for Audit
+
+The following code is used to generate the predictions that will be used for model auditing. The output file will be named `Cas2PredictionsMiller Salary.csv` and will be output at the top of the repo.
+
+```{r, message=FALSE}
+# load the audit data
+AuditData <- read_csv('../data/CaseStudy2CompSetNoSalary_test.csv')
+# factor JobLevel
+AuditData$JobLevel <- factor(AuditData$JobLevel)
+
+predictions <- as.double(predict(lin.model.cv, AuditData))
+
+write_csv(data.frame(
+  ID = AuditData$ID,
+  MonthlyIncome = predictions
+  ), 
+  path = '../../Cas2PredictionsMiller Salary.csv')
+
+```
 
 
 
