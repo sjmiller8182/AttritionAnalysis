@@ -33,6 +33,7 @@ source('../helper/visual.R')
 
 # read in data
 train <- read_csv('../data/CaseStudy2-data_train.csv')
+train$JobLevel <-  as.factor(train$JobLevel)
 ```
 
 ## Data Partitioning
@@ -48,6 +49,24 @@ dfTrain <- train[trainIndex,]
 dfTest <-  train[-trainIndex,]
 ```
 
+## Helper Code
+
+CV Runner - cross validate model on traning parition
+
+```{r}
+train.cv <- function(model, method, folds){
+  # Set up repeated k-fold cross-validation
+  train.control <-trainControl(method = "cv", number = folds)
+  # Train the model
+  model.cv <-dfTrain %>% train(model,
+                   data = .,
+                   method = method,
+                   trControl = train.control)
+  # print model summary
+  model.cv
+}
+```
+
 ## Model Construction
 
 From EDA, it appears that monthly income is correlated to `TotalworkingYears`, `Age`, `YearsAtCompany`, `YearsInCurrentRole`, and `YearsWithCurrentManager`.
@@ -55,36 +74,65 @@ From EDA, it appears that monthly income is correlated to `TotalworkingYears`, `
 From the factors:
 
 * `JobLevel` appears to partion `TotalWorkingYears` and `MonthlyIncome` very well.
+* `JobRole` appears to partion `MonthlyIncome` very well.
 
+The following models will be used to for regression: `Linear Regression` and `k-Nearest Neighbors`.
+
+### Linear Regression
+
+Based on EDA, the following model will be used for linear regression:
+
+$$ \mu \lbrace MonthlyIncome \rbrace = \beta_0 + \beta_1 (JobLevel) + \beta_2(JobRole) + \beta_3(JobLevel)(TotalWorkingYears) $$
+
+Estimate model on whole dataset and create fit assessement plots.
 
 ```{r}
-#model.linear <- dfTrain %>% lm(MonthlyIncome ~ TotalWorkingYears*JobLevel + JobLevel, data = .)
-
-model.linear <- dfTrain %>% lm(MonthlyIncome ~ TotalWorkingYears:JobLevel + JobLevel + JobRole, data = .)
+model.linear <- dfTrain %>% lm(MonthlyIncome ~ JobLevel + JobRole + TotalWorkingYears:JobLevel, data = .)
 
 summary(model.linear)
 
 dfTrain  %>% basic.fit.plots(., model.linear)
 ```
 
+Cross-validate model with linear regression
 
 ```{r, cv_pipe}
 
 model.formula <- MonthlyIncome ~ TotalWorkingYears:JobLevel + JobLevel + TotalWorkingYears:JobRole
 
-# Set up repeated k-fold cross-validation
-train.control <-trainControl(method = "cv", number = 5)
-# Train the model
-model.cv <-dfTrain %>% train(model.formula,
-                 data = .,
-                 method ='lm',
-                 trControl = train.control)
+# Eval model on 5 folds
+lin.model.cv <- train.cv(model.formula, 'lm', 5)
+
 # print model summary
-model.cv
+lin.model.cv
+
+# print md table with model performance
+kable(data.frame('RMSE' = c(lin.model.cv$results$RMSE),
+                 'Adj R Square' = c(lin.model.cv$results$Rsquared)))
 ```
 
+### K Nearest Neighbors Regression
+
+Since is a nonparametric model, a few correlated parameters will be added
+
 ```{r}
-model.formula <- MonthlyIncome ~ TotalWorkingYears:JobLevel + JobLevel + TotalWorkingYears:JobRole
+model.formula <- MonthlyIncome ~ TotalWorkingYears:JobLevel + JobLevel + JobLevel:Age + TotalWorkingYears:JobRole + JobRole
+
+# Eval model on 5 folds
+knn.model.cv <- train.cv(model.formula, 'knn', 5)
+
+# print the model
+knn.model.cv
+```
+
+Tune KNN regressor
+
+```{r}
+model.formula <- MonthlyIncome ~ TotalWorkingYears:JobLevel + JobLevel + JobLevel:Age + TotalWorkingYears:JobRole + JobRole
+
+#model.formula <- MonthlyIncome ~ TotalWorkingYears:JobLevel + JobLevel + TotalWorkingYears:JobRole
+#c(2,3,5,7,9,11,13,15)
+knn.tuningGrid <- expand.grid(k = seq(1:15))
 
 # Set up repeated k-fold cross-validation
 train.control <-trainControl(method = "cv", number = 5)
@@ -92,10 +140,34 @@ train.control <-trainControl(method = "cv", number = 5)
 model.cv <-dfTrain %>% train(model.formula,
                  data = .,
                  method ='knn',
-                 trControl = train.control)
+                 trControl = train.control,
+                 tuneGrid = knn.tuningGrid)
 # print model summary
 model.cv
 ```
+
+Plot k VS RMSE to visualize model tuning
+
+```{r}
+k.values <- model.cv$results$k
+RMSE <- model.cv$results$RMSE
+Rsquared <- model.cv$results$Rsquared
+
+knn.tune <- data.frame(k.values, RMSE, Rsquared)
+p1 <- knn.tune %>% 
+  ggplot(aes(x = k.values, y = RMSE)) + geom_point() + 
+  scale_fill_few(palette = 'Dark') + 
+  ggtitle('RMSE vs k for KNN Tuning') +
+  xlab('k Parameter')
+
+p2 <- knn.tune %>% 
+  ggplot(aes(x = k.values, y = Rsquared)) + geom_point() + 
+  scale_fill_few(palette = 'Dark') + 
+  ggtitle('R Squared vs k for KNN Tuning') +
+  xlab('k Parameter')
+
+grid.arrange(p1,p2, ncol = 2)
 ```
+
 
 
