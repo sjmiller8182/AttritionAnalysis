@@ -113,7 +113,21 @@ kable(data.frame('RMSE' = c(lin.model.cv$results$RMSE),
 
 ### K Nearest Neighbors Regression
 
-Since is a nonparametric model, a few correlated parameters will be added
+Since KNN is a nonparametric model, a few correlated parameters will be added `Age` and an interation between `JobRol` and `TotalWorkingYears`. This will be compared to a benchmark model that was used for linear regression.
+
+#### KNN with Simpler Model
+
+```{r}
+model.formula <- MonthlyIncome ~ TotalWorkingYears:JobLevel + JobLevel + TotalWorkingYears:JobRole
+
+# Eval model on 5 folds
+knn.model.cv <- train.cv(model.formula, 'knn', 5)
+
+# print the model
+knn.model.cv
+```
+
+#### KNN with More Complex Model
 
 ```{r}
 model.formula <- MonthlyIncome ~ TotalWorkingYears:JobLevel + JobLevel + JobLevel:Age + TotalWorkingYears:JobRole + JobRole
@@ -125,7 +139,15 @@ knn.model.cv <- train.cv(model.formula, 'knn', 5)
 knn.model.cv
 ```
 
-Tune KNN regressor
+#### Model Decisions
+
+The more complex model appears to give a better R-Squared after CV. Then model will be used to go farward with KNN.
+
+With the model chosen for KNN, the parameter k will now be tuned.
+
+##### Tune KNN regressor
+
+5-fold CV is used to tune k over possible values of 1-15. Based on the scatter plot of RMSE and R-Squared vs k, the performance appears to flatten bewteen k = 4 and k = 9. k = 7 will be chosen.
 
 ```{r}
 model.formula <- MonthlyIncome ~ TotalWorkingYears:JobLevel + JobLevel + JobLevel:Age + TotalWorkingYears:JobRole + JobRole
@@ -135,7 +157,7 @@ model.formula <- MonthlyIncome ~ TotalWorkingYears:JobLevel + JobLevel + JobLeve
 knn.tuningGrid <- expand.grid(k = seq(1:15))
 
 # Set up repeated k-fold cross-validation
-train.control <-trainControl(method = "cv", number = 5)
+train.control <-trainControl(method = "repeatedcv", number = 5)
 # Train the model
 model.cv <-dfTrain %>% train(model.formula,
                  data = .,
@@ -168,6 +190,40 @@ p2 <- knn.tune %>%
 
 grid.arrange(p1,p2, ncol = 2)
 ```
+
+### Model Selection From Test
+
+With the models chosen and tuned, they will be tested against a validation set to see how well the models generalize to a new set of data `dfTest`. This validation will be used for final model selection.
+
+
+```{r}
+# helper function for calculating model performance
+RMSE <- function(model, df){
+  predictions <- predict(model, df)
+  sqrt(mean((df$MonthlyIncome - predictions)^2))
+}
+
+knn.test.RMSE <- RMSE(knn.model.cv, dfTest)
+lin.test.RMSE <- RMSE(lin.model.cv, dfTest)
+
+knn.train.RMSE <- RMSE(knn.model.cv, dfTrain)
+lin.train.RMSE <- RMSE(lin.model.cv, dfTrain)
+
+kable(data.frame(
+  Model = c('Linear Regression', 'KNN'),
+  RMSE.Test = c(lin.test.RMSE, knn.test.RMSE),
+  RMSE.Train = c(lin.train.RMSE, knn.train.RMSE),
+  Abs.Difference = c(abs(lin.test.RMSE - lin.train.RMSE),
+                     abs(knn.test.RMSE - knn.train.RMSE))
+))
+
+```
+
+
+
+
+
+
 
 
 
