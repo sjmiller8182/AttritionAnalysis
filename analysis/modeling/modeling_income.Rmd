@@ -15,8 +15,6 @@ knitr::opts_chunk$set(echo = TRUE)
 # import libraries
 library(knitr)
 library(tidyverse)
-library(naniar)
-library(Hmisc)
 library(GGally)
 library(gridExtra)
 library(RColorBrewer)
