@@ -1,0 +1,83 @@
+---
+title: "Modeling Attrition"
+author: "Stuart Miller"
+date: "August 11, 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r, message=FALSE}
+## Computation Setup
+
+# import libraries
+library(knitr)
+library(tidyverse)
+library(GGally)
+library(gridExtra)
+library(RColorBrewer)
+library(gplots)
+library(corrplot)
+library(ggthemes)
+library(caret)
+
+set.seed(3456)
+
+# import helper functions
+source('../helper/data_munging.R')
+source('../helper/visual.R')
+
+# read in data
+train <- read_csv('../data/CaseStudy2-data_train.csv')
+
+# create a vector of numeric features
+features.numeric <- c('DailyRate', 'DistanceFromHome', 'Age', 'HourlyRate', 'MonthlyIncome', 'MonthlyRate',
+           'NumCompaniesWorked','PercentSalaryHike', 'TotalWorkingYears', 'TrainingTimesLastYear',
+           'YearsAtCompany','YearsInCurrentRole','YearsSinceLastPromotion', 'YearsWithCurrManager')
+
+# create a vector of numeric features
+features.factor <- c('BusinessTravel', 'Department', 'Education', 'EducationField', 'EmployeeNumber', 'EnvironmentSatisfaction', 'Gender', 'JobInvolvement', 'JobLevel', 'JobRole', 'JobSatisfaction', 'MaritalStatus', 'OverTime', 'PerformanceRating', 'RelationshipSatisfaction', 'StockOptionLevel', 'WorkLifeBalance')
+
+# factor categorical variables
+train[, features.factor] <- lapply(train[, features.factor], as.factor)
+```
+
+## Data Partitioning
+
+The training dataset will be split into a training set and a test set. The training set `dfTrain` will be used for model cross validation. The test set will be used for final model selection.
+
+```{r}
+# split off a test set
+trainIndex <- createDataPartition(train$Attrition , p = .75, 
+                                  list = FALSE, 
+                                  times = 1)
+dfTrain <- train[trainIndex,]
+dfTest <-  train[-trainIndex,]
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
