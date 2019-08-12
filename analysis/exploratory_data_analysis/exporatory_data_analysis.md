@@ -1386,3 +1386,386 @@ grid.arrange(btMI, btAg, btYAC, btYCM, btTWY)
 ```
 
 ![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-41-1.png)<!-- -->
+
+``` r
+btMI <- train %>% 
+  ggplot(aes(x = Attrition,
+             y = log(MonthlyIncome),
+             fill = Attrition)) +
+  geom_boxplot() + 
+  scale_fill_few(palette = 'Dark') + 
+  theme_few()
+
+btAg <- train %>% 
+  ggplot(aes(x = Attrition,
+             y = Age,
+             fill = Attrition)) +
+  geom_boxplot() + 
+  scale_fill_few(palette = 'Dark') + 
+  theme_few()
+
+btYAC <- train %>% 
+  ggplot(aes(x = Attrition,
+             y = YearsAtCompany,
+             fill = Attrition)) +
+  geom_boxplot() + 
+  scale_fill_few(palette = 'Dark') + 
+  theme_few()
+
+btYCM <- train %>% 
+  ggplot(aes(x = Attrition,
+             y = YearsWithCurrManager,
+             fill = Attrition)) +
+  geom_boxplot() + 
+  scale_fill_few(palette = 'Dark') + 
+  theme_few()
+
+btTWY <- train %>% 
+  ggplot(aes(x = Attrition,
+             y = TotalWorkingYears,
+             fill = Attrition)) +
+  geom_boxplot() + 
+  scale_fill_few(palette = 'Dark') + 
+  theme_few()
+
+grid.arrange(btMI, btAg, btYAC, btYCM, btTWY)
+```
+
+![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-42-1.png)<!-- -->
+
+## All Numeric Features vs Attrition
+
+``` r
+features.numeric
+```
+
+    ##  [1] "DailyRate"               "DistanceFromHome"       
+    ##  [3] "Age"                     "HourlyRate"             
+    ##  [5] "MonthlyIncome"           "MonthlyRate"            
+    ##  [7] "NumCompaniesWorked"      "PercentSalaryHike"      
+    ##  [9] "TotalWorkingYears"       "TrainingTimesLastYear"  
+    ## [11] "YearsAtCompany"          "YearsInCurrentRole"     
+    ## [13] "YearsSinceLastPromotion" "YearsWithCurrManager"
+
+``` r
+train %>% 
+  ggplot(aes(x = DailyRate)) +
+  geom_histogram(bins = 15) +
+  facet_wrap( ~ Attrition, scales = 'free') + 
+  scale_fill_few(palette = 'Dark') + 
+  theme_few()
+```
+
+![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-44-1.png)<!-- -->
+
+``` r
+train %>% 
+  ggplot(aes(x = DistanceFromHome)) +
+  geom_histogram(bins = 15) +
+  facet_wrap( ~ Attrition, scales = 'free') + 
+  scale_fill_few(palette = 'Dark') + 
+  theme_few()
+```
+
+![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-45-1.png)<!-- -->
+
+``` r
+train %>% 
+  ggplot(aes(x = Age)) +
+  geom_histogram(bins = 15) +
+  facet_wrap( ~ Attrition, scales = 'free') + 
+  scale_fill_few(palette = 'Dark') + 
+  theme_few()
+```
+
+![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-46-1.png)<!-- -->
+
+``` r
+train %>% 
+  ggplot(aes(x = HourlyRate)) +
+  geom_histogram(bins = 15) +
+  facet_wrap( ~ Attrition, scales = 'free') + 
+  scale_fill_few(palette = 'Dark') + 
+  theme_few()
+```
+
+![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-47-1.png)<!-- -->
+
+``` r
+train %>% 
+  ggplot(aes(x = MonthlyIncome)) +
+  geom_histogram(bins = 15) +
+  facet_wrap( ~ Attrition, scales = 'free') + 
+  scale_fill_few(palette = 'Dark') + 
+  theme_few()
+```
+
+![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-48-1.png)<!-- -->
+
+``` r
+train %>% 
+  ggplot(aes(x = MonthlyRate)) +
+  geom_histogram(bins = 15) +
+  facet_wrap( ~ Attrition, scales = 'free') + 
+  scale_fill_few(palette = 'Dark') + 
+  theme_few()
+```
+
+![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-49-1.png)<!-- -->
+
+``` r
+train %>% 
+  ggplot(aes(x = NumCompaniesWorked)) +
+  geom_histogram(bins = 15) +
+  facet_wrap( ~ Attrition, scales = 'free') + 
+  scale_fill_few(palette = 'Dark') + 
+  theme_few()
+```
+
+![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-50-1.png)<!-- -->
+
+``` r
+train %>% 
+  ggplot(aes(x = PercentSalaryHike)) +
+  geom_histogram(bins = 15) +
+  facet_wrap( ~ Attrition, scales = 'free') + 
+  scale_fill_few(palette = 'Dark') + 
+  theme_few()
+```
+
+![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-51-1.png)<!-- -->
+
+``` r
+train %>% 
+  ggplot(aes(x = TotalWorkingYears)) +
+  geom_histogram(bins = 15) +
+  facet_wrap( ~ Attrition, scales = 'free') + 
+  scale_fill_few(palette = 'Dark') + 
+  theme_few()
+```
+
+![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-52-1.png)<!-- -->
+
+``` r
+train %>% 
+  ggplot(aes(x = TrainingTimesLastYear)) +
+  geom_histogram(bins = 15) +
+  facet_wrap( ~ Attrition, scales = 'free') + 
+  scale_fill_few(palette = 'Dark') + 
+  theme_few()
+```
+
+![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-53-1.png)<!-- -->
+
+``` r
+train %>% 
+  ggplot(aes(x = YearsAtCompany)) +
+  geom_histogram(bins = 15) +
+  facet_wrap( ~ Attrition, scales = 'free') + 
+  scale_fill_few(palette = 'Dark') + 
+  theme_few()
+```
+
+![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-54-1.png)<!-- -->
+
+``` r
+train %>% 
+  ggplot(aes(x = YearsInCurrentRole)) +
+  geom_histogram(bins = 15) +
+  facet_wrap( ~ Attrition, scales = 'free') + 
+  scale_fill_few(palette = 'Dark') + 
+  theme_few()
+```
+
+![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-55-1.png)<!-- -->
+
+``` r
+train %>% 
+  ggplot(aes(x = YearsSinceLastPromotion)) +
+  geom_histogram(bins = 15) +
+  facet_wrap( ~ Attrition, scales = 'free') + 
+  scale_fill_few(palette = 'Dark') + 
+  theme_few()
+```
+
+![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-56-1.png)<!-- -->
+
+``` r
+train %>% 
+  ggplot(aes(x = YearsWithCurrManager)) +
+  geom_histogram(bins = 15) +
+  facet_wrap( ~ Attrition, scales = 'free') + 
+  scale_fill_few(palette = 'Dark') + 
+  theme_few()
+```
+
+![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-57-1.png)<!-- -->
+
+## All Factor Features vs Attrition
+
+``` r
+features.factor
+```
+
+    ##  [1] "BusinessTravel"           "Department"              
+    ##  [3] "Education"                "EducationField"          
+    ##  [5] "EmployeeNumber"           "EnvironmentSatisfaction" 
+    ##  [7] "Gender"                   "JobInvolvement"          
+    ##  [9] "JobLevel"                 "JobRole"                 
+    ## [11] "JobSatisfaction"          "MaritalStatus"           
+    ## [13] "OverTime"                 "PerformanceRating"       
+    ## [15] "RelationshipSatisfaction" "StockOptionLevel"        
+    ## [17] "WorkLifeBalance"
+
+``` r
+train %>% ggplot(aes(x = BusinessTravel, fill = Attrition)) +
+  geom_bar(position = 'fill') +
+  coord_flip()
+```
+
+![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-59-1.png)<!-- -->
+
+``` r
+train %>% ggplot(aes(x = Department, fill = Attrition)) +
+  geom_bar(position = 'fill') +
+  coord_flip()
+```
+
+![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-60-1.png)<!-- -->
+
+There appears to be some difference between education levels and
+attition.
+
+``` r
+train %>% ggplot(aes(x = Education, fill = Attrition)) +
+  geom_bar(position = 'fill') +
+  coord_flip()
+```
+
+![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-61-1.png)<!-- -->
+
+There appears to be some difference between education fields and
+attition.
+
+``` r
+train %>% ggplot(aes(x = EducationField, fill = Attrition)) +
+  geom_bar(position = 'fill') +
+  coord_flip()
+```
+
+![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-62-1.png)<!-- -->
+
+There appears to be some difference between environment satisfaction and
+attition.
+
+``` r
+train %>% ggplot(aes(x = EnvironmentSatisfaction, fill = Attrition)) +
+  geom_bar(position = 'fill') +
+  coord_flip()
+```
+
+![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-63-1.png)<!-- -->
+
+``` r
+train %>% ggplot(aes(x = Gender, fill = Attrition)) +
+  geom_bar(position = 'fill') +
+  coord_flip()
+```
+
+![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-64-1.png)<!-- -->
+
+Job involvement appears to have a big impact on attiriton
+
+``` r
+train %>% ggplot(aes(x = JobInvolvement, fill = Attrition)) +
+  geom_bar(position = 'fill') +
+  coord_flip()
+```
+
+![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-65-1.png)<!-- -->
+
+There is a correlation between job level and attrition
+
+``` r
+train %>% ggplot(aes(x = JobLevel, fill = Attrition)) +
+  geom_bar(position = 'fill') +
+  coord_flip()
+```
+
+![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-66-1.png)<!-- -->
+
+There is a correlation between job role and attrition
+
+``` r
+train %>% ggplot(aes(x = JobRole, fill = Attrition)) +
+  geom_bar(position = 'fill') +
+  coord_flip()
+```
+
+![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-67-1.png)<!-- -->
+
+Job satisfaction appears to affect attrition
+
+``` r
+train %>% ggplot(aes(x = JobSatisfaction, fill = Attrition)) +
+  geom_bar(position = 'fill') +
+  coord_flip()
+```
+
+![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-68-1.png)<!-- -->
+
+Marital status also correlates with attrition
+
+``` r
+train %>% ggplot(aes(x = MaritalStatus, fill = Attrition)) +
+  geom_bar(position = 'fill') +
+  coord_flip()
+```
+
+![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-69-1.png)<!-- -->
+
+There appears to be a difference in attition related to overtime
+
+``` r
+train %>% ggplot(aes(x = OverTime, fill = Attrition)) +
+  geom_bar(position = 'fill') +
+  coord_flip()
+```
+
+![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-70-1.png)<!-- -->
+
+``` r
+train %>% ggplot(aes(x = PerformanceRating, fill = Attrition)) +
+  geom_bar(position = 'fill') +
+  coord_flip()
+```
+
+![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-71-1.png)<!-- -->
+
+``` r
+train %>% ggplot(aes(x = RelationshipSatisfaction, fill = Attrition)) +
+  geom_bar(position = 'fill') +
+  coord_flip()
+```
+
+![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-72-1.png)<!-- -->
+
+Stock option level appears to play a role in attition
+
+``` r
+train %>% ggplot(aes(x = StockOptionLevel, fill = Attrition)) +
+  geom_bar(position = 'fill') +
+  coord_flip()
+```
+
+![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-73-1.png)<!-- -->
+
+Work life balance appears to play a role in attirition
+
+``` r
+train %>% ggplot(aes(x = WorkLifeBalance, fill = Attrition)) +
+  geom_bar(position = 'fill') +
+  coord_flip()
+```
+
+![](exporatory_data_analysis_files/figure-gfm/unnamed-chunk-74-1.png)<!-- -->
