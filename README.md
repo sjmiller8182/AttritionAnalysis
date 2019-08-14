@@ -34,7 +34,7 @@ The [Codebook](https://github.com/sjmiller8182/AttritionAnalysis/blob/master/Cod
     |    ├── exploratory_data_analysis      # Rmarkdown files for EDA
     |    ├── modeling                       # Rmarkdown files for the modeling
     │    ├── data                           # Raw data and merge automation files
-    │    └── helper			    # Files containing helper functions
+    │    └── helper			                # Files containing helper functions
     ├── reports                             # Reports from the analysis
     ├── CodeBook.md                         # Information regarding the computational environment, code, and data
     ├── LICENSE                             # All code and analysis is licensed under the MIT license
