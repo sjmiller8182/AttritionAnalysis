@@ -12,9 +12,29 @@ In an effort to reduce employee attrition, data has been provided on employees. 
  * Job role specific trend
  * Any other interesting trends in the data
 
+## Reports
+
+Powerpoint  
+youtube link  
+written report  
+
 ## Analysis 
 
-### Analysis Files
+The files in this folder contain the original analysis files for EDA and modeling.
+
+### Exploratory Data Analysis
+
+`./analysis/exploratory_data_analysis/`
+* [`exploratory_data_analysis.Rmd`](https://github.com/sjmiller8182/AttritionAnalysis/blob/master/analysis/exploratory_data_analysis/exporatory_data_analysis.Rmd): contains the primary EDA work.
+* [`exploratory_data_analysis.md`](https://github.com/sjmiller8182/AttritionAnalysis/blob/master/analysis/exploratory_data_analysis/exporatory_data_analysis.md): markdown file containing the EDA work generated from the `Rmd` file.
+
+### Modeling
+
+`./analysis/modeling/`
+
+* [`modeling_attrition.Rmd`](https://github.com/sjmiller8182/AttritionAnalysis/blob/master/analysis/modeling/modeling_attrition.Rmd): file containing modeling of attrition.
+* [`modeling_income.Rmd`](https://github.com/sjmiller8182/AttritionAnalysis/blob/master/analysis/modeling/modeling_income.Rmd): file containing modeling of income.
+* [`modeling_income.md`](https://github.com/sjmiller8182/AttritionAnalysis/blob/master/analysis/modeling/modeling_income.md): a markdown file generated from `modeling_income.Rmd`.
 
 ## Data
 
