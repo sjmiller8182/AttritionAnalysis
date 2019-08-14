@@ -38,6 +38,8 @@ The following R packages are required for running the code or paper generation.
 
 ## R Session Info
 
+Provides an example of the environment used to generate the analysis.
+
 ```R
 R version 3.5.1 (2018-07-02)
 Platform: x86_64-pc-linux-gnu (64-bit)
