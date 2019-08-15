@@ -8,15 +8,40 @@ TODO: Add description
 
 Data is included in git repo because it is light-weight and in git-friendly format.
 
-## R Variables
+## R Variables (Main)
 
-TODO: Add main R variables
+### Variables in `/analysis/exploratory_data_analysis/`
+
+* 
+
+### Variables in `/analysis/modeling/`
+
+#### Data
+
+* `train`: The whole training set; raw import from csv. 870 observations of 32 variables.
+* `dfTrain`: A 75% parition of `train` used for model training and cross validation.
+* `dfTest`: A 25% parition of `train` used for model selection and final validation.
+* `preds`: The predictions based on the models
+
+#### Functional
+
+* `model.cv`: Trained model produced by `caret`.
+* `lin.model.cv`: A linear regression model `lm` produced by `caret`.
+* `knn.model.cv`: A k-nearest neighbors regression model produced by `caret`.
+* `train.control`: List of model training options.
+* `model.formula`: A regression model expression.
 
 ## Code
 
-TODO: Code file descriptions
+All analysis code files are located at `./analysis/`
 
-* All analysis code files are located at `./analysis/`
+### Variables in `/analysis/exploratory_data_analysis/`
+
+
+
+### Variables in `/analysis/modeling/`
+
+
 
 ## Libraries
 
