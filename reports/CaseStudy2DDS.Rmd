@@ -1,5 +1,5 @@
 ---
-title: "Title"
+title: "Attrition Analysis"
 author: "Stuart Miller"
 date: |
   Master of Science in Data Science, Southern Methodist University, USA
@@ -13,7 +13,7 @@ biblio-style: apalike
 output:
   bookdown::pdf_document2:
      citation_package: natbib
-     keep_tex: true
+     keep_tex: false
      toc: false
 header-includes:
    - \usepackage{amsmath}
@@ -31,11 +31,25 @@ editor_options:
 
 # Introduction
 
-@Sleuth
+Attrition is costly. Attrition presents loss of talent and manpower, which often results in schedule delays, loss of productivity, and costs of hiring new talent. In this analysis, we examine a dataset employee attributes with attrition labels to find attributes associated with attrition and create a predictive model for attrition. First, the top factors associated with attrition will be presented and explained. Then, a predictive model will be shown and explained. Additionally, a predictive model for income will be presented. The income predictor was a special request along with the main analysis. Lastly, an interesting trends found in the data will be reported.
 
 # Attrition Analysis
 
+## Top Three Factors
+
+The top three factors associated with attrition are
+
+## Factor 1
+
+## Factor 2
+
+## Facotr 3
+
 # Modeling
+
+## Attrition Modeling
+
+## Income Modeling
 
 # Appendix
 
