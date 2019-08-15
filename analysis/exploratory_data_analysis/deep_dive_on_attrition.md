@@ -1,15 +1,9 @@
----
-title: "Deep Dive on Attrition"
-author: "Stuart Miller"
-date: "August 14, 2019"
-output: github_document
----
+Deep Dive on Attrition
+================
+Stuart Miller
+August 14, 2019
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
-
-```{r, setup-env, message=FALSE}
+``` r
 # import libraries
 library(knitr)
 library(tidyverse)
@@ -43,34 +37,40 @@ features.factor <- c('BusinessTravel', 'Department', 'Education', 'EducationFiel
 
 # factor categorical variables
 train[, features.factor] <- lapply(train[, features.factor], as.factor)
-
 ```
 
 ## Analysis of Attrtion
 
-The objective is to find where high attrition is correlated. Based on previous EDA, the following variables (or levels of variables) seem to be associated with attrition. The top 3 factors associated with attrition are numbered. The top 3 factors associated with attrition are examinated in association to other relative factors.
+The objective is to find where high attrition is correlated. Based on
+previous EDA, the following variables (or levels of variables) seem to
+be associated with attrition. The top 3 factors associated with
+attrition are numbered. The top 3 factors associated with attrition are
+examinated in association to other relative factors.
 
-**Factor** 
+**Factor**
 
-* JobInvolvement - 1
-* WorkLifeBalance - 2
-* OverTime - 3
-* JobRole
-* JobLevel
-* JobSatisfaction
+  - JobInvolvement - 1
+  - WorkLifeBalance - 2
+  - OverTime - 3
+  - JobRole
+  - JobLevel
+  - JobSatisfaction
 
 **Numeric**
 
-* MonthlyIncome
-* TotalWorkingYears
-* YearsInCurrentRole
-* YearsWithCurrmanager
+  - MonthlyIncome
+  - TotalWorkingYears
+  - YearsInCurrentRole
+  - YearsWithCurrmanager
 
 ## Job Involvement
 
-Job involvement appears to have a high impact on employee attrition. Nearly 50% with the lowest job involvement leave the position. It is expected that there would be an interaction with `JobRole`, `JobLevel`, and `OverTime`.
+Job involvement appears to have a high impact on employee attrition.
+Nearly 50% with the lowest job involvement leave the position. It is
+expected that there would be an interaction with `JobRole`, `JobLevel`,
+and `OverTime`.
 
-```{r}
+``` r
 train %>% ggplot(aes(x = JobInvolvement, fill = Attrition)) +
   geom_bar(position = 'fill') +
   coord_flip() + 
@@ -78,11 +78,16 @@ train %>% ggplot(aes(x = JobInvolvement, fill = Attrition)) +
   theme_few()
 ```
 
+![](deep_dive_on_attrition_files/figure-gfm/unnamed-chunk-1-1.png)<!-- -->
+
 ### Job Role Interaction
 
-Almost all job roles show high attrition with low job involvement. With Human Resources and Sales Representative having the worst rates. Notibly, attrition rates of Manufacturing Director and Research Director do not seem to be affected by job involvement.
+Almost all job roles show high attrition with low job involvement. With
+Human Resources and Sales Representative having the worst rates.
+Notibly, attrition rates of Manufacturing Director and Research Director
+do not seem to be affected by job involvement.
 
-```{r}
+``` r
 train %>% ggplot(aes(x = JobInvolvement, fill = Attrition)) +
   geom_bar(position = 'fill') +
   coord_flip() +
@@ -91,11 +96,14 @@ train %>% ggplot(aes(x = JobInvolvement, fill = Attrition)) +
   theme_few()
 ```
 
+![](deep_dive_on_attrition_files/figure-gfm/unnamed-chunk-2-1.png)<!-- -->
+
 ### Job Level Interaction
 
-Attriton is high for all job levels where job level is low. It is especially high (over 50%) in level 1 and 5.
+Attriton is high for all job levels where job level is low. It is
+especially high (over 50%) in level 1 and 5.
 
-```{r}
+``` r
 train %>% ggplot(aes(x = JobInvolvement, fill = Attrition)) +
   geom_bar(position = 'fill') +
   coord_flip() +
@@ -104,11 +112,14 @@ train %>% ggplot(aes(x = JobInvolvement, fill = Attrition)) +
   theme_few()
 ```
 
+![](deep_dive_on_attrition_files/figure-gfm/unnamed-chunk-3-1.png)<!-- -->
+
 ### Overtime Interaction
 
-Attrition is higher for eac level of job involvement, but it is also generally higher for Overtime workers.
+Attrition is higher for eac level of job involvement, but it is also
+generally higher for Overtime workers.
 
-```{r}
+``` r
 train %>% ggplot(aes(x = JobInvolvement, fill = Attrition)) +
   geom_bar(position = 'fill') +
   coord_flip() +
@@ -116,13 +127,17 @@ train %>% ggplot(aes(x = JobInvolvement, fill = Attrition)) +
   scale_fill_few(palette = 'Dark') + 
   theme_few()
 ```
+
+![](deep_dive_on_attrition_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->
 
 ## Work-Life Balence
 
-Work-life balence appears to have a high impact on employee attrition. Nearly 50% with the lowest job involvement leave the position. It is expected that there would be an interaction with `JobRole`, `JobLevel`, and `OverTime`.
+Work-life balence appears to have a high impact on employee attrition.
+Nearly 50% with the lowest job involvement leave the position. It is
+expected that there would be an interaction with `JobRole`, `JobLevel`,
+and `OverTime`.
 
-
-```{r}
+``` r
 train %>% ggplot(aes(x = WorkLifeBalance, fill = Attrition)) +
   geom_bar(position = 'fill') +
   coord_flip() + 
@@ -130,11 +145,14 @@ train %>% ggplot(aes(x = WorkLifeBalance, fill = Attrition)) +
   theme_few()
 ```
 
+![](deep_dive_on_attrition_files/figure-gfm/unnamed-chunk-5-1.png)<!-- -->
+
 ### Job Role Interaction
 
-Sales Executives and Laboratory Technitions with low work-life balence have high attrition rates. 
+Sales Executives and Laboratory Technitions with low work-life balence
+have high attrition rates.
 
-```{r}
+``` r
 train %>% ggplot(aes(x = WorkLifeBalance, fill = Attrition)) +
   geom_bar(position = 'fill') +
   coord_flip() +
@@ -143,11 +161,14 @@ train %>% ggplot(aes(x = WorkLifeBalance, fill = Attrition)) +
   theme_few()
 ```
 
+![](deep_dive_on_attrition_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
+
 ### Job Level Interaction
 
-Low work-life balence appears to have an affect on lower job levels, especially level 1.
+Low work-life balence appears to have an affect on lower job levels,
+especially level 1.
 
-```{r}
+``` r
 train %>% ggplot(aes(x = WorkLifeBalance, fill = Attrition)) +
   geom_bar(position = 'fill') +
   coord_flip() +
@@ -156,11 +177,14 @@ train %>% ggplot(aes(x = WorkLifeBalance, fill = Attrition)) +
   theme_few()
 ```
 
+![](deep_dive_on_attrition_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
+
 ### Overtime Interaction
 
-Attrition is higher for each level of job involvement, but it is also generally higher for Overtime workers.
+Attrition is higher for each level of job involvement, but it is also
+generally higher for Overtime workers.
 
-```{r}
+``` r
 train %>% ggplot(aes(x = WorkLifeBalance, fill = Attrition)) +
   geom_bar(position = 'fill') +
   coord_flip() +
@@ -169,14 +193,16 @@ train %>% ggplot(aes(x = WorkLifeBalance, fill = Attrition)) +
   theme_few()
 ```
 
-
+![](deep_dive_on_attrition_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->
 
 ## Overtime
 
-Job involvement appears to have a high impact on employee attrition. Nearly 50% with the lowest job involvement leave the position. It is expected that there would be an interaction with `JobRole`, `JobLevel`, and `MonthlyIncome`.
+Job involvement appears to have a high impact on employee attrition.
+Nearly 50% with the lowest job involvement leave the position. It is
+expected that there would be an interaction with `JobRole`, `JobLevel`,
+and `MonthlyIncome`.
 
-
-```{r}
+``` r
 train %>% ggplot(aes(x = OverTime, fill = Attrition)) +
   geom_bar(position = 'fill') +
   coord_flip() + 
@@ -184,11 +210,14 @@ train %>% ggplot(aes(x = OverTime, fill = Attrition)) +
   theme_few()
 ```
 
+![](deep_dive_on_attrition_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
+
 ### Job Role Interaction
 
-Sales Executives and Laboratory Technitions with low work-life balence have high attrition rates. 
+Sales Executives and Laboratory Technitions with low work-life balence
+have high attrition rates.
 
-```{r}
+``` r
 train %>% ggplot(aes(x = OverTime, fill = Attrition)) +
   geom_bar(position = 'fill') +
   coord_flip() +
@@ -197,11 +226,14 @@ train %>% ggplot(aes(x = OverTime, fill = Attrition)) +
   theme_few()
 ```
 
+![](deep_dive_on_attrition_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
+
 ### Job Level Interaction
 
-Low work-life balence appears to have an affect on lower job levels, especially level 1.
+Low work-life balence appears to have an affect on lower job levels,
+especially level 1.
 
-```{r}
+``` r
 train %>% ggplot(aes(x = OverTime, fill = Attrition)) +
   geom_bar(position = 'fill') +
   coord_flip() +
@@ -210,11 +242,14 @@ train %>% ggplot(aes(x = OverTime, fill = Attrition)) +
   theme_few()
 ```
 
+![](deep_dive_on_attrition_files/figure-gfm/unnamed-chunk-11-1.png)<!-- -->
+
 ### MonthlyIncome Interaction
 
-Monthly income appears to be lower for employees who are working overtime with attrition.
+Monthly income appears to be lower for employees who are working
+overtime with attrition.
 
-```{r}
+``` r
 train %>% 
   ggplot(aes(x = Attrition,
              y = MonthlyIncome,
@@ -226,8 +261,4 @@ train %>%
   ggtitle('MonthlyIncome by Attrition and Overtime')
 ```
 
-
-
-
-
-
+![](deep_dive_on_attrition_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->
