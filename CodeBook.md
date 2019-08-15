@@ -4,7 +4,9 @@ This code book describes the data and the computational environment.
 
 ## Data
 
-TODO: Add description
+The dataset contains 35 variables on 1470 employees. Of the 1470 records, attrition labels were removed from 300 records and salary labels were removed from another 300 records. These sets of 300 records will be used for model assessment by a 3rd party analyst. The remain data, 870 records, will be used for analysis and model training.
+
+More information is included in the [data README](https://github.com/sjmiller8182/AttritionAnalysis/tree/master/analysis/data).
 
 Data is included in git repo because it is light-weight and in git-friendly format.
 
