@@ -179,7 +179,57 @@ preds <- predict(model.cv, dfTest[, !names(dfTest) %in% ('Attrition')])
 confusionMatrix(table(preds, dfTest$Attrition))
 ```
 
+## Output Data for Audit
 
+The following code is used to generate the predictions that will be used for model auditing. The output file will be named `Cas2PredictionsMiller Salary.csv` and will be output at the top of the repo.
+
+```{r, message=FALSE, warning=FALSE}
+# load the audit data
+AuditData <- read_csv('../data/CaseStudy2CompSetNoAttrition_test.csv')
+
+# Apply same changes to audit data
+# drop variables that are not useful - static or unique
+AuditData <- select(AuditData, -c('EmployeeCount', 'EmployeeNumber','StandardHours', 'Over18'))
+
+# factor categorical variables
+AuditData[, features.factor] <- lapply(AuditData[, features.factor], as.factor)
+
+
+AuditData$JobInvolvement <- recode(AuditData$JobInvolvement, '3' = '2', '4' = '2')
+AuditData$EnvironmentSatisfaction <- recode(AuditData$EnvironmentSatisfaction, '3' = '2', '4' = '2')
+AuditData$WorkLifeBalance <- recode(AuditData$WorkLifeBalance, '3' = '2', '4' = '2')
+AuditData$StockOptionLevel <- recode(AuditData$StockOptionLevel, '0' = '3', '1' = '2')
+AuditData$Education <- recode(AuditData$Education, '2' = '1', '3' = '1', '4' = '1')
+AuditData$JobLevel <- recode(AuditData$JobLevel,  '2' = '5', '3' = '5')
+AuditData$JobRole <- as.factor(recode(AuditData$JobRole, "Sales Representative" = 3,
+                                        "Research Scientist" = 2,
+                                        "Sales Executive" = 2,
+                                        "Human Resources" = 2,
+                                        "Laboratory Technician" = 2,
+                                        "Manufacturing Director" = 1,
+                                        "Research Director" = 1,
+                                        "Manager" = 1,
+                                        "Healthcare Representative" = 1))
+AuditData$BusinessTravel <- recode(AuditData$BusinessTravel, "Non-Travel" = "Travel_Rarely" )
+AuditData$EducationField <- recode(AuditData$EducationField,
+                              "Technical Degree" = '1',
+                              "Human Resources"  = '1',
+                              "Life Sciences"    = '2',
+                              "Marketing"        = '3',
+                              "Medical"          = '2',
+                              "Other"            = '3')
+AuditData$JobSatisfaction <- recode(AuditData$JobSatisfaction,
+                                '3' = '1',
+                                '2' = '1')
+
+predictions <- predict(model.cv, AuditData)
+
+write_csv(data.frame(
+  ID = AuditData$ID,
+  Attrition = predictions
+  ), 
+  path = '../../Cas2PredictionsMiller Attrition.csv')
+```
 
 
 
