@@ -28,6 +28,8 @@ The files in this folder contain the original analysis files for EDA and modelin
 
 * [`exploratory_data_analysis.Rmd`](https://github.com/sjmiller8182/AttritionAnalysis/blob/master/analysis/exploratory_data_analysis/exporatory_data_analysis.Rmd): contains the primary EDA work.
 * [`exploratory_data_analysis.md`](https://github.com/sjmiller8182/AttritionAnalysis/blob/master/analysis/exploratory_data_analysis/exporatory_data_analysis.md): markdown file containing the EDA work generated from the `Rmd` file.
+* [`deep_dive_on_attrition.Rmd`](https://github.com/sjmiller8182/AttritionAnalysis/blob/master/analysis/exploratory_data_analysis/deep_dive_on_attrition.Rmd): contains the deeper EDA work on attrition.
+* [`deep_dive_on_attrition.md`](https://github.com/sjmiller8182/AttritionAnalysis/blob/master/analysis/exploratory_data_analysis/deep_dive_on_attrition.md): markdown file containing the EDA work generated from the `Rmd` file.
 
 ### Modeling
 
