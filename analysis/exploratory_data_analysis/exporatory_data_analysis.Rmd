@@ -1442,10 +1442,123 @@ train %>% ggplot(aes(x = WorkLifeBalance, fill = Attrition)) +
   coord_flip()
 ```
 
+## All Numeric Features vs Attrition
 
+```{r, fig.width=15, fig.height=15}
+p1 <- train %>% 
+  ggplot(aes(x = Attrition,
+             y = log(DailyRate),
+             fill = Attrition)) +
+  geom_boxplot() + 
+  scale_fill_few(palette = 'Dark') + 
+  theme_few()
 
+p2 <- train %>% 
+  ggplot(aes(x = Attrition,
+             y = DistanceFromHome,
+             fill = Attrition)) +
+  geom_boxplot() + 
+  scale_fill_few(palette = 'Dark') + 
+  theme_few()
 
+p3 <- train %>% 
+  ggplot(aes(x = Attrition,
+             y = Age,
+             fill = Attrition)) +
+  geom_boxplot() + 
+  scale_fill_few(palette = 'Dark') + 
+  theme_few()
 
+p4 <- train %>% 
+  ggplot(aes(x = Attrition,
+             y = HourlyRate,
+             fill = Attrition)) +
+  geom_boxplot() + 
+  scale_fill_few(palette = 'Dark') + 
+  theme_few()
+
+p5 <- train %>% 
+  ggplot(aes(x = Attrition,
+             y = MonthlyIncome,
+             fill = Attrition)) +
+  geom_boxplot() + 
+  scale_fill_few(palette = 'Dark') + 
+  theme_few()
+
+p6 <- train %>% 
+  ggplot(aes(x = Attrition,
+             y = MonthlyRate,
+             fill = Attrition)) +
+  geom_boxplot() + 
+  scale_fill_few(palette = 'Dark') + 
+  theme_few()
+
+p7 <- train %>% 
+  ggplot(aes(x = Attrition,
+             y = NumCompaniesWorked,
+             fill = Attrition)) +
+  geom_boxplot() + 
+  scale_fill_few(palette = 'Dark') + 
+  theme_few()
+
+p8 <- train %>% 
+  ggplot(aes(x = Attrition,
+             y = PercentSalaryHike,
+             fill = Attrition)) +
+  geom_boxplot() + 
+  scale_fill_few(palette = 'Dark') + 
+  theme_few()
+
+p9 <- train %>% 
+  ggplot(aes(x = Attrition,
+             y = TotalWorkingYears,
+             fill = Attrition)) +
+  geom_boxplot() + 
+  scale_fill_few(palette = 'Dark') + 
+  theme_few()
+
+p10 <- train %>% 
+  ggplot(aes(x = Attrition,
+             y = TrainingTimesLastYear,
+             fill = Attrition)) +
+  geom_boxplot() + 
+  scale_fill_few(palette = 'Dark') + 
+  theme_few()
+
+p11 <- train %>% 
+  ggplot(aes(x = Attrition,
+             y = YearsAtCompany,
+             fill = Attrition)) +
+  geom_boxplot() + 
+  scale_fill_few(palette = 'Dark') + 
+  theme_few()
+
+p12 <- train %>% 
+  ggplot(aes(x = Attrition,
+             y = YearsInCurrentRole,
+             fill = Attrition)) +
+  geom_boxplot() + 
+  scale_fill_few(palette = 'Dark') + 
+  theme_few()
+
+p13 <- train %>% 
+  ggplot(aes(x = Attrition,
+             y = YearsSinceLastPromotion,
+             fill = Attrition)) +
+  geom_boxplot() + 
+  scale_fill_few(palette = 'Dark') + 
+  theme_few()
+
+p14 <- train %>% 
+  ggplot(aes(x = Attrition,
+             y = YearsWithCurrManager,
+             fill = Attrition)) +
+  geom_boxplot() + 
+  scale_fill_few(palette = 'Dark') + 
+  theme_few()
+grid.arrange(p1, p2, p3, p4, p5, p6, p7,
+             p8, p9, p10, p11, p12, p13, p14)
+```
 
 
 
