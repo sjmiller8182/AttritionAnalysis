@@ -35,15 +35,17 @@ Data is included in git repo because it is light-weight and in git-friendly form
 
 ## Code
 
-All analysis code files are located at `./analysis/`
+All analysis code files are located at `./analysis/`. All work was done with `Rmd` files.
 
-### Variables in `/analysis/exploratory_data_analysis/`
+### Code files in `/analysis/exploratory_data_analysis/`
 
+* [`exploratory_data_analysis.Rmd`](https://github.com/sjmiller8182/AttritionAnalysis/blob/master/analysis/exploratory_data_analysis/exporatory_data_analysis.Rmd): contains the primary EDA work.
+* [`deep_dive_on_attrition.Rmd`](https://github.com/sjmiller8182/AttritionAnalysis/blob/master/analysis/exploratory_data_analysis/deep_dive_on_attrition.Rmd): contains the deeper EDA work on attrition.
 
+### Code files in `/analysis/modeling/`
 
-### Variables in `/analysis/modeling/`
-
-
+* [`modeling_attrition.Rmd`](https://github.com/sjmiller8182/AttritionAnalysis/blob/master/analysis/modeling/modeling_attrition.Rmd): file containing modeling of attrition.
+* [`modeling_income.Rmd`](https://github.com/sjmiller8182/AttritionAnalysis/blob/master/analysis/modeling/modeling_income.Rmd): file containing modeling of income.
 
 ## Libraries
 
