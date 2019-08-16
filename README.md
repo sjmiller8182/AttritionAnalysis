@@ -44,11 +44,20 @@ The files in this folder contain the original analysis files for EDA and modelin
 
 ## Data
 
+### Analysis Data
+
 Three files were provided. The first is a complete set that will be used for modeling. The other two will be used by a independent party to verify model quality.
 
  * [`CaseStudy2-data_train.csv`](https://github.com/sjmiller8182/AttritionAnalysis/blob/master/analysis/data/CaseStudy2-data_train.csv): A complete set of data. The analysis is performed on this dataset.
  * [`CaseStudy2CompSetNoAttrition_test.csv`](https://github.com/sjmiller8182/AttritionAnalysis/blob/master/analysis/data/CaseStudy2CompSetNoAttrition_test.csv): A set of data with the response (attrition) removed. This set will be used by an external pary to access the provided model for predicting attrition.
  * [`CaseStudy2CompSetNoSalary_test.csv`](https://github.com/sjmiller8182/AttritionAnalysis/blob/master/analysis/data/CaseStudy2CompSetNoSalary_test.csv): A set of data with the response (salary) removed. This set will be used by an external pary to access the provided model for predicting attrition.
+
+### Predictions
+
+The following files contain predictions created with the models created based on the training data. These predictions are provided for assessment by a 3rd party.
+
+[`Cas2PredictionsMiller Attrition.csv`](https://github.com/sjmiller8182/CaseStudy2DDS/blob/master/Cas2PredictionsMiller%20Attrition.csv): predictions for employee attrition.
+[`Cas2PredictionsMiller Salary.csv`](https://github.com/sjmiller8182/CaseStudy2DDS/blob/master/Cas2PredictionsMiller%20Salary.csv): preditions for employee salary.
 
 ## Codebook
 
