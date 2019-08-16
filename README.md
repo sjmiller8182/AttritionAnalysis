@@ -44,6 +44,8 @@ The files in this folder contain the original analysis files for EDA and modelin
 
 ## Data
 
+More information is included in the [data README](https://github.com/sjmiller8182/AttritionAnalysis/tree/master/analysis/data).
+
 ### Analysis Data
 
 Three files were provided. The first is a complete set that will be used for modeling. The other two will be used by a independent party to verify model quality.
