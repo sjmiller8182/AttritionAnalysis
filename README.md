@@ -56,8 +56,8 @@ Three files were provided. The first is a complete set that will be used for mod
 
 The following files contain predictions created with the models created based on the training data. These predictions are provided for assessment by a 3rd party.
 
-[`Cas2PredictionsMiller Attrition.csv`](https://github.com/sjmiller8182/CaseStudy2DDS/blob/master/Cas2PredictionsMiller%20Attrition.csv): predictions for employee attrition.
-[`Cas2PredictionsMiller Salary.csv`](https://github.com/sjmiller8182/CaseStudy2DDS/blob/master/Cas2PredictionsMiller%20Salary.csv): preditions for employee salary.
+* [`Cas2PredictionsMiller Attrition.csv`](https://github.com/sjmiller8182/CaseStudy2DDS/blob/master/Cas2PredictionsMiller%20Attrition.csv): predictions for employee attrition.
+* [`Cas2PredictionsMiller Salary.csv`](https://github.com/sjmiller8182/CaseStudy2DDS/blob/master/Cas2PredictionsMiller%20Salary.csv): preditions for employee salary.
 
 ## Codebook
 
