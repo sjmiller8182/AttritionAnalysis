@@ -316,6 +316,7 @@ $(document).ready(function () {
 
 <div id="executive-summary" class="section level1">
 <h1>Executive Summary</h1>
+<p>In this analysis, we present factors related to attrition. Three top factors are presented and relations to other factors are described. Models for attrition and income are presented along with a discussion on performance. Results of the income modeling are interpreted. Finally, some other trends in the data are described.</p>
 </div>
 <div id="introduction" class="section level1">
 <h1>Introduction</h1>
@@ -392,7 +393,6 @@ $(document).ready(function () {
 <div id="other-interesting-trend" class="section level1">
 <h1>Other Interesting Trend</h1>
 <p>There appears to be a correlation between years worked at the company and years in current role, years with current manager, and years since last promotion. This correlation appears to be almost linear. However, a linear regression does not meet the required assumptions.</p>
-<p>This provides some evidence that employees who stay at the company for a long time stay in the same role and stay with the same manager.</p>
 <pre class="r"><code>p1 &lt;- train %&gt;% filter(YearsAtCompany &gt; 0) %&gt;%
   ggplot(aes(x = YearsWithCurrManager, y = YearsAtCompany)) + 
   geom_point() + geom_smooth(method = 'lm')

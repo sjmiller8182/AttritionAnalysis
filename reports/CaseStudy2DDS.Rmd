@@ -50,6 +50,12 @@ train[, features.factor] <- lapply(train[, features.factor], as.factor)
 
 # Executive Summary
 
+In this analysis, we present factors related to attrition.
+Three top factors are presented and relations to other factors are described.
+Models for attrition and income are presented along with a discussion on performance.
+Results of the income modeling are interpreted.
+Finally, some other trends in the data are described.
+
 # Introduction
 
 Attrition is costly. Attrition presents loss of talent and manpower, which often results in schedule delays, loss of productivity, and
@@ -265,8 +271,6 @@ There appears to be a correlation between years worked at the company and years 
 years with current manager, and years since last promotion.
 This correlation appears to be almost linear. However, a linear regression does not meet the required assumptions.
 
-This provides some evidence that employees who stay at the company for a long time stay in the same role
-and stay with the same manager.
 
 ```{r, message=FALSE}
 p1 <- train %>% filter(YearsAtCompany > 0) %>%
