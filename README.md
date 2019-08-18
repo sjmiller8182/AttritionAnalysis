@@ -15,8 +15,7 @@ In an effort to reduce employee attrition, data has been provided on employees. 
 ## Reports
 
 Powerpoint  
-youtube link  
-written report  
+youtube link   
 
 ## Analysis 
 
