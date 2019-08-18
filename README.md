@@ -14,8 +14,10 @@ In an effort to reduce employee attrition, data has been provided on employees. 
 
 ## Reports
 
-Powerpoint  
-youtube link   
+Reports generated from the analysis
+
+* [Powerpoint Presentation](https://github.com/sjmiller8182/CaseStudy2DDS/blob/master/reports/AttritionAnalysis.pdf)  
+* [Presentation Video](https://www.youtube.com/watch?v=QXD0BcmQ6LU)   
 
 ## Analysis 
 
