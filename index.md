@@ -1,7 +1,16 @@
 
 Created by [Stuart Miller](https://github.com/sjmiller8182).
 
-## Purpose
+**Contents**
+* [Purpose](#Purpose)
+* [Reports](#Reports)
+* [Analysis](#Analysis)
+  * [Exploratory Data Analysis](#EDA)
+  * [Modeling](#Modeling)
+* [Data](#Data)
+* [Codebook](#Codebook)
+
+## Purpose <a name="Purpose"></a>
 
 In an effort to reduce employee attrition, data has been provided on employees. The objective is to analyze the data to determine what factors (if any) correlate to attrition. The following will be reported:
 
@@ -11,7 +20,7 @@ In an effort to reduce employee attrition, data has been provided on employees. 
  * Job role specific trend
  * Any other interesting trends in the data
 
-## Reports
+## Reports <a name="Reports"></a>
 
 Reports generated from the analysis
 
@@ -19,18 +28,18 @@ Reports generated from the analysis
 * [Powerpoint Presentation](./reports/AttritionAnalysis.pdf)  
 * [Presentation Video](https://www.youtube.com/watch?v=QXD0BcmQ6LU) (directs to youtube)
 
-## Analysis 
+## Analysis  <a name="Analysis"></a>
 
 The files in this folder contain the original analysis files for EDA and modeling.
 
-### Exploratory Data Analysis
+### Exploratory Data Analysis <a name="EDA"></a>
 
 * [`exploratory_data_analysis.Rmd`](./analysis/exploratory_data_analysis/exporatory_data_analysis.Rmd): contains the primary EDA work.
 * [`exploratory_data_analysis.md`](./analysis/exploratory_data_analysis/exporatory_data_analysis.md): markdown file containing the EDA work generated from the `Rmd` file.
 * [`deep_dive_on_attrition.Rmd`](./analysis/exploratory_data_analysis/deep_dive_on_attrition.Rmd): contains the deeper EDA work on attrition.
 * [`deep_dive_on_attrition.md`](./analysis/exploratory_data_analysis/deep_dive_on_attrition.md): markdown file containing the EDA work generated from the `Rmd` file.
 
-### Modeling
+### Modeling <a name="Modeling"></a>
 
 * [`modeling_attrition.Rmd`](./analysis/modeling/modeling_attrition.Rmd): file containing modeling of attrition.
 * [`modeling_attrition.md`](./analysis/modeling/modeling_attrition.md): a markdown file generated from `modeling_attrition.Rmd`.
@@ -39,7 +48,7 @@ The files in this folder contain the original analysis files for EDA and modelin
 * [`modeling_income.md`](./analysis/modeling/modeling_income.md): a markdown file generated from `modeling_income.Rmd`.
 * [`Cas2PredictionsMiller Salary.csv`](./Cas2PredictionsMiller%20Salary.csv): predictions from the income model index by ID for 3rd party model assessment.
 
-## Data
+## Data <a name="Data"></a>
 
 More information is included in the [data README](./analysis/data/README.md).
 
@@ -58,19 +67,6 @@ The following files contain predictions created with the models created based on
 * [`Cas2PredictionsMiller Attrition.csv`](./Cas2PredictionsMiller%20Attrition.csv): predictions for employee attrition.
 * [`Cas2PredictionsMiller Salary.csv`](./Cas2PredictionsMiller%20Salary.csv): preditions for employee salary.
 
-## Codebook
+## Codebook <a name="Codebook"></a>
 
 The [Codebook](./CodeBook.md) provides additional details on the regarding the computational environment, code, and data.
-
-## Repo Structure
-    .
-    ├── analysis                            # Primary analysis files
-    |    ├── exploratory_data_analysis      # Rmarkdown files for EDA
-    |    ├── modeling                       # Rmarkdown files for the modeling
-    │    ├── data                           # Raw data and merge automation files
-    │    └── helper                         # Files containing helper functions
-    ├── reports                             # Reports from the analysis
-    ├── CodeBook.md                         # Information regarding the computational environment,
-    │                                         code, and data
-    ├── LICENSE                             # All code and analysis is licensed under the MIT license
-    └── README.md
